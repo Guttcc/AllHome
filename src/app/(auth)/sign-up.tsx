@@ -35,7 +35,6 @@ export default function Page() {
                 navigate: ({ session, decorateUrl }) => {
                     if (session?.currentTask) {
                         // Haddle pending session tasks
-                        // See https://clerk.com/docs/guides/development/custom-flows/authentication/session-tasks
                         console.log(session?.currentTask);
                         return;
                     }
