@@ -1,3 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 138 47% 97%;
+    --foreground: 146 52% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 146 52% 15%;
+    --primary: 147 75% 33%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 143 61% 91%;
+    --secondary-foreground: 146 55% 24%;
+    --muted: 140 57% 94%;
+    --muted-foreground: 146 26% 40%;
+    --accent: 142 72% 84%;
+    --destructive: 8 100% 97%;
+    --destructive-foreground: 6 74% 54%;
+    --border: 141 47% 83%;
+    --input: 141 47% 83%;
+    --ring: 146 75% 45%;
+    --success: 146 80% 40%;
+    --priority-low: 142 73% 90%;
+    --priority-low-foreground: 146 68% 33%;
+    --priority-medium: 45 100% 90%;
+    --priority-medium-foreground: 35 91% 31%;
+    --priority-high: 10 100% 92%;
+    --priority-high-foreground: 6 71% 48%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: 150 31% 9%;
+      --foreground: 136 42% 92%;
+      --card: 149 27% 12%;
+      --card-foreground: 136 42% 92%;
+      --primary: 142 70% 54%;
+      --primary-foreground: 150 35% 100%;
+      --secondary: 149 24% 19%;
+      --secondary-foreground: 138 30% 83%;
+      --muted: 149 18% 16%;
+      --muted-foreground: 140 17% 68%;
+      --accent: 146 35% 20%;
+      --destructive: 8 55% 16%;
+      --destructive-foreground: 7 85% 76%;
+      --border: 149 16% 24%;
+      --input: 149 16% 24%;
+      --ring: 145 72% 56%;
+      --success: 146 70% 52%;
+      --priority-low: 147 36% 22%;
+      --priority-low-foreground: 137 56% 78%;
+      --priority-medium: 39 39% 23%;
+      --priority-medium-foreground: 45 88% 79%;
+      --priority-high: 8 35% 24%;
+      --priority-high-foreground: 8 86% 82%;
+    }
+  }
+}

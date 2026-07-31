@@ -7,7 +7,7 @@ export default function Page() {
     const { signOut } = useClerk();
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} className="bg-background text-muted-foreground">
             <Text style={styles.title}>Welcome!</Text>
             
             <Show when="signed-in">
