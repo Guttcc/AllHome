@@ -6,7 +6,9 @@ const useSocialAuth = () => {
   const [loadingStrategy, setLoadingStrategy] = useState<string | null>(null);
   const { startSSOFlow } = useSSO();
 
-  const hadleSocialAuth = async (strategy: "oauth_github" | "oauth_google") => {
+  const handleSocialAuth = async (
+    strategy: "oauth_github" | "oauth_google",
+  ) => {
     if (loadingStrategy) return;
 
     setLoadingStrategy(strategy);
@@ -30,7 +32,7 @@ const useSocialAuth = () => {
     }
   };
 
-  return { hadleSocialAuth, loadingStrategy };
+  return { handleSocialAuth, loadingStrategy };
 };
 
 export default useSocialAuth;
