@@ -21,7 +21,7 @@
       "package": "com.anonymous.myapp"
     },
     "web": {
-      "output": "static",
+      "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
