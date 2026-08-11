@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 export default function Page() {
     const { user } = useUser();
     const { signOut } = useClerk();
-
+    
     return (
         <View style={styles.container} className="bg-background text-muted-foreground">
             <Text style={styles.title}>Welcome!</Text>
