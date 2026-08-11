@@ -3,11 +3,11 @@ module.exports = {
   // NOTE: Update this to include the paths to all files that contain Nativewind classes.
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
-  darkMode: "media",
+  darkMode: "media", // this tells Tailwind/NativeWind to follow the device color scheme.
   theme: {
     extend: {
       colors: {
-        Background: "hsl(var(--background) / <alpha-value>)",
+        background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
         card: "hsl(var(--card) / <alpha-value>)",
         "card-foreground": "hsl(var(--card-foreground) / <alpha-value>)",
