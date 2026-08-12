@@ -9,6 +9,7 @@
     "@expo/vector-icons": "^15.1.1",
     "@neondatabase/serverless": "^1.1.0",
     "@react-navigation/native": "^7.3.14",
+    "@sentry/react-native": "^8.22.0",
     "babel-preset-expo": "^57.0.4",
     "drizzle-orm": "^0.45.2",
     "expo": "~57.0.8",

@@ -36,7 +36,15 @@
         }
       ],
       "expo-image",
-      "@clerk/expo"
+      "@clerk/expo",
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "allhome",
+          "organization": "camilo-dev"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
