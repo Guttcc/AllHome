@@ -43,7 +43,8 @@
     "completionRate": "Tasa de finalización",
     "handleFirst": "Prioriza resolver estos artículos primero",
     "clearCompleted": "Borrar artículos completados",
-    "feedback": "Enviar comentarios"
+    "feedback": "Enviar comentarios",
+    "criticalCovered": "¡Todo cubierto! No hay compras urgentes."
   },
   "form": {
     "itemName": "Nombre del artículo",
@@ -60,7 +61,8 @@
     "active": "activos",
     "groups": "grupos",
     "today": "Hoy",
-    "feedback": "Comentarios"
+    "feedback": "Comentarios",
+    "clear": "Al día"
   },
   "categories": {
     "produce": "Productos",
@@ -74,5 +76,22 @@
     "medium": "Medio",
     "high": "Alto",
     "highPriority": "Alta prioridad"
+  },
+  "groups": {
+    "myList": "Mi lista de compras",
+    "familyList": "Lista Familiar",
+    "selectList": "Seleccionar Lista",
+    "joinGroup": "Unirme a grupo",
+    "createGroup": "Crear grupo",
+    "leaveGroup": "Salir del grupo familiar",
+    "leaveTitle": "Salir del grupo",
+    "leaveConfirm": "¿Estás seguro de que deseas salir de este grupo?",
+    "cancel": "Cancel",
+    "leave": "Salir",
+    "addToGroup": "Añadir a",
+    "addedBy": "Añadido por",
+    "enterGroupName": "Nombre del grupo",
+    "enterCode": "Código o link de invitación",
+    "defaultUser": "Usuario"
   }
 }

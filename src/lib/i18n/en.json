@@ -43,7 +43,8 @@
     "completionRate": "Completion rate",
     "handleFirst": "Handle these items first",
     "clearCompleted": "Clear completed items",
-    "feedback": "Send feedback"
+    "feedback": "Send feedback",
+    "criticalCovered": "All set! No urgent items."
   },
   "form": {
     "itemName": "Item name",
@@ -60,7 +61,8 @@
     "active": "active",
     "groups": "groups",
     "today": "Today",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "clear": "All clear"
   },
   "categories": {
     "produce": "Produce",
@@ -74,5 +76,22 @@
     "medium": "Medium",
     "high": "High",
     "highPriority": "High Priority"
+  },
+  "groups": {
+    "myList": "My Grocery List",
+    "familyList": "Family List",
+    "selectList": "Select List",
+    "joinGroup": "Join group",
+    "createGroup": "Create group",
+    "leaveGroup": "Leave family group",
+    "leaveTitle": "Leave group",
+    "leaveConfirm": "Are you sure you want to leave this group?",
+    "cancel": "Cancel",
+    "leave": "Leave",
+    "addToGroup": "Add to",
+    "addedBy": "Added by",
+    "enterGroupName": "Group name",
+    "enterCode": "Invite code or link",
+    "defaultUser": "User"
   }
 }

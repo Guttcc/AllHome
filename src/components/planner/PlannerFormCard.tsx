@@ -1,5 +1,6 @@
 import { useLanguage } from "@/lib/i18n";
 import { GroceryCategory, GroceryPriority, useGroceryStore } from "@/store/grocery-store";
+import { useUser } from "@clerk/expo";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
@@ -16,8 +17,9 @@ const categoryIcons = {
 };
 
 const PlannerFormCard = () => {
-    const { error, addItem } = useGroceryStore();
+    const { error, addItem, groups, activeContext } = useGroceryStore();
     const { t } = useLanguage();
+    const { user } = useUser();
 
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("1");
@@ -25,17 +27,21 @@ const PlannerFormCard = () => {
     const [priority, setPriority] = useState<GroceryPriority>("medium");
 
     const canCreate = name.trim().length > 0;
+    const currentUserName = user?.firstName || user?.fullName || t("groups.defaultUser") || "Usuario";
+    const activeGroup = groups.find((g) => g.id === activeContext) || groups[0];
 
     const handleQuantityChange = (value: string) => {
         setQuantity(value.replace(/[^0-9]/g, ""));
     };
 
-    const createItem = async () => {
+    const createItem = async (targetGroupId: string | null = null) => {
         await addItem({
             name: name.trim(),
             category,
             priority,
             quantity: Number(quantity) || 1,
+            groupId: targetGroupId,
+            createdByName: currentUserName,
         });
 
         setName("");
@@ -142,11 +148,12 @@ const PlannerFormCard = () => {
                 })}
             </View>
 
+            {/* BOTÓN 1: LISTA PERSONAL */}
             <Pressable
                 className={`mt-5 flex-row items-center justify-center rounded-2xl py-3 ${
                     canCreate ? "bg-primary" : "bg-muted"
                 }`}
-                onPress={createItem}
+                onPress={() => createItem(null)}
                 disabled={!canCreate}
             >
                 <FontAwesome6 name="plus" size={14} color={canCreate ? "#ffffff" : "#7a9386"} />
@@ -158,6 +165,26 @@ const PlannerFormCard = () => {
                     {t("planner.addButton") || "Add to Grocery List"}
                 </Text>
             </Pressable>
+
+            {/* BOTÓN 2: LISTA FAMILIAR (Si pertenece a algún grupo) */}
+            {groups.length > 0 && activeGroup && (
+                <Pressable
+                    className={`mt-2 flex-row items-center justify-center rounded-2xl border border-primary py-3 ${
+                        canCreate ? "bg-primary/10" : "bg-muted"
+                    }`}
+                    onPress={() => createItem(activeGroup.id)}
+                    disabled={!canCreate}
+                >
+                    <FontAwesome6 name="house-user" size={14} color={canCreate ? "#3b5a4a" : "#7a9386"} />
+                    <Text
+                        className={`ml-2 text-base font-semibold ${
+                            canCreate ? "text-primary" : "text-muted-foreground"
+                        }`}
+                    >
+                        {t("groups.addToGroup") || "Añadir a"} {activeGroup.name}
+                    </Text>
+                </Pressable>
+            )}
 
             {error ? (
                 <View className="mt-3 rounded-2xl border border-destructive bg-destructive px-3 py-2">
