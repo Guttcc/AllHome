@@ -1,8 +1,10 @@
+import { useLanguage } from "@/lib/i18n";
 import { useGroceryStore } from "@/store/grocery-store";
 import { Text, View } from "react-native";
 
 const ListHeroCard = () => {
     const { items } = useGroceryStore();
+    const { t } = useLanguage();
 
     const completedCount = items.filter((item) => item.purchased).length;
     const pendingCount = items.length - completedCount;
@@ -11,15 +13,15 @@ const ListHeroCard = () => {
     return (
         <View className="rounded-3xl bg-primary p-5">
             <Text className="text-sm font-semibold uppercase tracking-[1px] text-primary-foreground/70">
-                Today
+                {t("hero.today")}
             </Text>
 
             <Text className="mt-1 text-3xl font-extrabold text-primary-foreground">
-                Your Grocery Board
+                {t("hero.title")}
             </Text>
 
             <Text className="mt-1 text-sm text-primary-foreground/80">
-                {pendingCount} pending · {completedCount} completed
+                {pendingCount} {t("status.pending").toLowerCase()} · {completedCount} {t("status.completed").toLowerCase()}
             </Text>
 
             <View className="mt-4 overflow-hidden rounded-full bg-white/50">

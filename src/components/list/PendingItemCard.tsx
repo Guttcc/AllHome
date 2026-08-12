@@ -1,3 +1,4 @@
+import { useLanguage } from "@/lib/i18n";
 import { GroceryItem, useGroceryStore } from "@/store/grocery-store";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
@@ -16,6 +17,10 @@ const priorityPillText = {
 
 const PendingItemCard = ({ item }: { item: GroceryItem }) => {
     const { removeItem, updateQuantity, togglePurchased } = useGroceryStore();
+    const { t } = useLanguage();
+
+    const translatedPriority = t(`priorities.${item.priority}`) || item.priority;
+    const translatedCategory = t(`categories.${item.category.toLowerCase()}`) || item.category;
 
     return (
         <View className="rounded-3xl border border-border bg-card p-4">
@@ -30,7 +35,7 @@ const PendingItemCard = ({ item }: { item: GroceryItem }) => {
                         <Text className="flex-1 text-lg font-semibold text-card-foreground">{item.name}</Text>
                         <View className={`rounded-full px-3 py-1 ${priorityPillBg[item.priority]}`}>
                             <Text className={`text-xs font-bold uppercase ${priorityPillText[item.priority]}`}>
-                                {item.priority}
+                                {translatedPriority}
                             </Text>
                         </View>
                     </View>
@@ -38,7 +43,7 @@ const PendingItemCard = ({ item }: { item: GroceryItem }) => {
                     <View className="mt-2 flex-row items-center gap-2">
                         <View className="rounded-full bg-secondary px-3 py-1">
                             <Text className="text-xs font-semibold text-secondary-foreground">
-                                {item.category}
+                                {translatedCategory}
                             </Text>
                         </View>
                     </View>
@@ -68,10 +73,10 @@ const PendingItemCard = ({ item }: { item: GroceryItem }) => {
                     className="h-9 w-9 items-center justify-center rounded-xl bg-destructive"
                     onPress={() => removeItem(item.id)}
                 >
-                <FontAwesome6 name="trash" size={13} color="#d45f58" />
-            </Pressable>
+                    <FontAwesome6 name="trash" size={13} color="#d45f58" />
+                </Pressable>
+            </View>
         </View>
-    </View>
     );
 };
 

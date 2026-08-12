@@ -1,3 +1,4 @@
+import { LanguageProvider } from "@/lib/i18n";
 import { ClerkProvider } from '@clerk/expo';
 import { tokenCache } from '@clerk/expo/token-cache';
 
@@ -26,12 +27,15 @@ export default Sentry.wrap(function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-        <KeyboardProvider>
-          <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-            <Stack screenOptions={{ headerShown: false}} />
-          </ThemeProvider>
-        </KeyboardProvider>
-    </ClerkProvider>
+    <LanguageProvider>
+      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+          <KeyboardProvider>
+            <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+              <Stack screenOptions={{ headerShown: false}} />
+            </ThemeProvider>
+          </KeyboardProvider>
+      </ClerkProvider>
+    </LanguageProvider>
   );
 })
+

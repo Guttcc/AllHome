@@ -5,9 +5,11 @@ import { FlatList, Text, View } from "react-native";
 import CompletedItems from "@/components/list/CompletedItems";
 import ListHeroCard from "@/components/list/ListHeroCard";
 import TabScreenBackground from "@/components/TabScreenBackground";
+import { useLanguage } from "@/lib/i18n";
 
 export default function ListScreen() {
     const { items } = useGroceryStore();
+    const { t } = useLanguage(); 
 
     const pendingItems = items.filter((item) => !item.purchased);
 
@@ -25,9 +27,11 @@ export default function ListScreen() {
                     <ListHeroCard />
                     <View className="flex-row items-center justify-between px-1">
                         <Text className="text-sm font-semibold uppercase tracking-[1px] text-muted-foreground">
-                            Shopping items
+                            {t("planner.shoppingItems")}
                         </Text>
-                        <Text className="text-sm text-muted-foreground">{pendingItems.length} active</Text>
+                        <Text className="text-sm text-muted-foreground">
+                            {pendingItems.length} {t("status.active")}
+                        </Text>
                     </View>
                 </View>
             }

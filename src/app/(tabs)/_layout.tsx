@@ -1,3 +1,4 @@
+import { useLanguage } from "@/lib/i18n";
 import { useGroceryStore } from "@/store/grocery-store";
 import { useAuth } from "@clerk/expo";
 import { Redirect } from "expo-router";
@@ -7,8 +8,8 @@ import { useEffect } from "react";
 
 export default function TabsLayout() {
   const { isSignedIn, isLoaded } = useAuth();
-
-  const { loadItems, items } = useGroceryStore();
+  const { loadItems } = useGroceryStore();
+  const { t } = useLanguage();
 
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
@@ -29,7 +30,7 @@ export default function TabsLayout() {
   return (
     <NativeTabs tintColor={tabTintColor}>
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>List</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>{t("nav.lists")}</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           sf={{
             default: "list.bullet.clipboard",
@@ -44,7 +45,7 @@ export default function TabsLayout() {
           sf={{ default: "plus.circle", selected: "plus.circle.fill" }}
           md="add"
         />
-        <NativeTabs.Trigger.Label>Planner</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>{t("nav.planner")}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="insights">
@@ -52,7 +53,7 @@ export default function TabsLayout() {
           sf={{ default: "chart.bar", selected: "chart.bar.fill" }}
           md="analytics"
         />
-        <NativeTabs.Trigger.Label>Insights</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>{t("nav.insights")}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );

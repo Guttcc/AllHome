@@ -27,6 +27,7 @@
     "plugins": [
       "@clerk/expo",
       "expo-router",
+      "expo-localization",
       [
         "expo-splash-screen",
         {

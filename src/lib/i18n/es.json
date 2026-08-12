@@ -1,0 +1,78 @@
+{
+  "auth": {
+    "title": "ALL HOME",
+    "tagline": "Planifica mejor, compra con más alegría",
+    "welcomeBack": "Bienvenido de nuevo",
+    "description": "Elige un proveedor social y salta directamente a tu experiencia de compras personalizada.",
+    "continueGoogle": "Continuar con Google",
+    "connectingGoogle": "Conectando Google...",
+    "continueGithub": "Continuar con GitHub",
+    "connectingGithub": "Conectando GitHub...",
+    "signedInAs": "Sesión iniciada como"
+  },
+  "hero": {
+    "today": "HOY",
+    "title": "Lista de Compras"
+  },
+  "nav": {
+    "lists": "Lista",
+    "planner": "Crear",
+    "insights": "Información"
+  },
+  "planner": {
+    "title": "Planificador de compras",
+    "tagline": "Planifica mejor, compra con más calma.",
+    "description": "Organiza tu próxima compra con categorías, cantidades y prioridades en un solo lugar.",
+    "buildYourList": "Crea tu lista",
+    "buildYourListDesc": "Agrega artículos con la cantidad, categoría y urgencia correctas.",
+    "yourGroceryBoard": "Tu tablero de compras",
+    "shoppingItems": "Artículos de compras",
+    "clearCompleted": "Borrar artículos completados",
+    "addItem": "Agregar a la lista de compras",
+    "itemName": "Nombre del artículo",
+    "namePlaceholder": "Ej: Arándanos",
+    "quantity": "Cantidad",
+    "category": "Categoría",
+    "priority": "Prioridad",
+    "addButton": "Añadir a la lista"
+  },
+  "insights": {
+    "itemsByCategory": "Artículos por categoría",
+    "addItemsMix": "Agrega artículos para revelar tu mezcla de categorías.",
+    "highPriorityRemaining": "Alta prioridad restante",
+    "completionRate": "Tasa de finalización",
+    "handleFirst": "Prioriza resolver estos artículos primero",
+    "clearCompleted": "Borrar artículos completados",
+    "feedback": "Enviar comentarios"
+  },
+  "form": {
+    "itemName": "Nombre del artículo",
+    "quantity": "Cantidad",
+    "category": "Categoría",
+    "priority": "Prioridad",
+    "units": "Unidades"
+  },
+  "status": {
+    "pending": "Pendiente",
+    "completed": "Completado",
+    "total": "Total",
+    "action": "Acción requerida",
+    "active": "activos",
+    "groups": "grupos",
+    "today": "Hoy",
+    "feedback": "Comentarios"
+  },
+  "categories": {
+    "produce": "Productos",
+    "dairy": "Lácteos",
+    "bakery": "Panadería",
+    "pantry": "Despensa",
+    "snacks": "Snacks"
+  },
+  "priorities": {
+    "low": "Bajo",
+    "medium": "Medio",
+    "high": "Alto",
+    "highPriority": "Alta prioridad"
+  }
+}

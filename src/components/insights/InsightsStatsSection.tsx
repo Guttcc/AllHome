@@ -1,9 +1,11 @@
+import { useLanguage } from "@/lib/i18n";
 import { useGroceryStore } from "@/store/grocery-store";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Text, View } from "react-native";
 
 export default function InsightsStatsSection() {
     const { items } = useGroceryStore();
+    const { t } = useLanguage();
 
     const totalItems = items.length;
     const completedItems = items.filter((item) => item.purchased).length;
@@ -19,7 +21,7 @@ export default function InsightsStatsSection() {
                         <FontAwesome6 name="clock" size={18} color="#fff" />
                     </View>
                     <Text className="mt-3 text-xs uppercase tracking-[1px] text-muted-foreground">
-                        Pending
+                        {t("status.pending")}
                     </Text>
                     <Text className="mt-1 text-3xl font-extrabold text-foreground">{pendingItems}</Text>
                 </View>
@@ -29,7 +31,7 @@ export default function InsightsStatsSection() {
                         <FontAwesome6 name="check" size={18} color="#fff" />
                     </View>
                     <Text className="mt-3 text-xs uppercase tracking-[1px] text-muted-foreground">
-                        Completed
+                        {t("status.completed")}
                     </Text>
                     <Text className="mt-1 text-3xl font-extrabold text-foreground">{completedItems}</Text>
                 </View>
@@ -38,14 +40,14 @@ export default function InsightsStatsSection() {
                     <View className="h-8 w-8 items-center justify-center rounded-xl bg-primary">
                         <FontAwesome6 name="layer-group" size={18} color="#fff" />
                     </View>
-                    <Text className="mt-3 text-xs uppercase tracking-[1px] text-muted-foreground">Total</Text>
+                    <Text className="mt-3 text-xs uppercase tracking-[1px] text-muted-foreground">{t("status.total")}</Text>
                     <Text className="mt-1 text-3xl font-extrabold text-foreground">{totalItems}</Text>
                 </View>
             </View>
 
             <View className="rounded-3xl border border-border bg-card p-4">
                 <View className="flex-row items-center justify-between">
-                    <Text className="text-sm font-semibold text-foreground">Completion rate</Text>
+                    <Text className="text-sm font-semibold text-foreground">{t("insights.completionRate")}</Text>
                     <Text className="text-sm font-semibold text-primary">{completionRate}%</Text>
                 </View>
                 <View className="mt-3 overflow-hidden rounded-full bg-secondary">

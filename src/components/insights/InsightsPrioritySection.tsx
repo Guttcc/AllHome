@@ -1,19 +1,21 @@
+import { useLanguage } from "@/lib/i18n";
 import { useGroceryStore } from "@/store/grocery-store";
 import { Text, View } from "react-native";
 
 export default function InsightsPrioritySection() {
     const { items } = useGroceryStore();
+    const { t } = useLanguage();
     const highPriority = items.filter((item) => item.priority === "high" && !item.purchased).length;
 
     const highPriorityTone =
         highPriority === 0
-            ? "Everything critical is covered."
-            : "Handle these first for a smoother trip.";
+            ? t("insights.criticalCovered")
+            : t("insights.handleFirst");
 
     return (
         <View className="rounded-3xl border border-border bg-card p-4">
             <View className="flex-row items-center justify-between">
-                <Text className="text-sm font-semibold text-foreground">High priority remaining</Text>
+                <Text className="text-sm font-semibold text-foreground">{t("insights.highPriorityRemaining")}</Text>
                 <View
                     className={`rounded-full px-3 py-1 ${highPriority ? "bg-priority-high" : "bg-priority-low"}`}
                 >
@@ -22,7 +24,7 @@ export default function InsightsPrioritySection() {
                             highPriority ? "text-priority-high-foreground" : "text-priority-low-foreground"
                         }`}
                     >
-                        {highPriority ? "Action" : "Clear"}
+                        {highPriority ? t("status.action") : t("status.clear")}
                     </Text>
                 </View>
             </View>

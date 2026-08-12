@@ -26,4 +26,5 @@ const PlannerHeroImage = () => {
         </View>
     );
 };
+
 export default PlannerHeroImage;

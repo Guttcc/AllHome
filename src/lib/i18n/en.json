@@ -1,0 +1,78 @@
+{
+  "auth": {
+    "title": "ALL HOME",
+    "tagline": "Plan smarter, Shop happier.",
+    "welcomeBack": "Welcome Back",
+    "description": "Choose a social provider and jump right into your personalized grocery experience.",
+    "continueGoogle": "Continue with Google",
+    "connectingGoogle": "Connecting Google...",
+    "continueGithub": "Continue with GitHub",
+    "connectingGithub": "Connecting GitHub...",
+    "signedInAs": "Signed in as"
+  },
+  "hero": {
+    "today": "TODAY",
+    "title": "Grocery List"
+  },
+  "nav": {
+    "lists": "Lists",
+    "planner": "Planner",
+    "insights": "Insights"
+  },
+  "planner": {
+    "title": "Grocery planner",
+    "tagline": "Plan smarter, shop calmer.",
+    "description": "Organize your next grocery run with categories, quantities, and priority in one place.",
+    "buildYourList": "Build your list",
+    "buildYourListDesc": "Add items with the right quantity, category, and urgency.",
+    "yourGroceryBoard": "Your Grocery Board",
+    "shoppingItems": "Shopping items",
+    "clearCompleted": "Clear completed items",
+    "addItem": "Add to Grocery List",
+    "itemName": "Item name",
+    "namePlaceholder": "Ex: Blueberries",
+    "quantity": "Quantity",
+    "category": "Category",
+    "priority": "Priority",
+    "addButton": "Add to Grocery List"
+  },
+  "insights": {
+    "itemsByCategory": "Items by category",
+    "addItemsMix": "Add items to reveal your category mix.",
+    "highPriorityRemaining": "High priority remaining",
+    "completionRate": "Completion rate",
+    "handleFirst": "Handle these items first",
+    "clearCompleted": "Clear completed items",
+    "feedback": "Send feedback"
+  },
+  "form": {
+    "itemName": "Item name",
+    "quantity": "Quantity",
+    "category": "Category",
+    "priority": "Priority",
+    "units": "Units"
+  },
+  "status": {
+    "pending": "Pending",
+    "completed": "Completed",
+    "total": "Total",
+    "action": "Action required",
+    "active": "active",
+    "groups": "groups",
+    "today": "Today",
+    "feedback": "Feedback"
+  },
+  "categories": {
+    "produce": "Produce",
+    "dairy": "Dairy",
+    "bakery": "Bakery",
+    "pantry": "Pantry",
+    "snacks": "Snacks"
+  },
+  "priorities": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "highPriority": "High Priority"
+  }
+}

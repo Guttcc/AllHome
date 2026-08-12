@@ -1,3 +1,4 @@
+import { useLanguage } from "@/lib/i18n";
 import { GroceryCategory, GroceryPriority, useGroceryStore } from "@/store/grocery-store";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useState } from "react";
@@ -16,6 +17,7 @@ const categoryIcons = {
 
 const PlannerFormCard = () => {
     const { error, addItem } = useGroceryStore();
+    const { t } = useLanguage();
 
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("1");
@@ -25,7 +27,6 @@ const PlannerFormCard = () => {
     const canCreate = name.trim().length > 0;
 
     const handleQuantityChange = (value: string) => {
-
         setQuantity(value.replace(/[^0-9]/g, ""));
     };
 
@@ -34,33 +35,36 @@ const PlannerFormCard = () => {
             name: name.trim(),
             category,
             priority,
-            quantity: Number(quantity),
+            quantity: Number(quantity) || 1,
         });
 
-
-    setName("");
-    setQuantity("1");
-    setCategory("Produce");
-    setPriority("medium");
+        setName("");
+        setQuantity("1");
+        setCategory("Produce");
+        setPriority("medium");
     };
 
     return (
         <View className="rounded-3xl border border-border bg-card p-4">
             {/* NAME */}
-            <Text className="text-sm font-semibold text-foreground">Item name</Text>
+            <Text className="text-sm font-semibold text-foreground">
+                {t("planner.itemName") || "Item name"}
+            </Text>
             <View className="mt-2 flex-row items-center rounded-2xl border border-border bg-muted px-4 py-3">
                 <FontAwesome6 name="bag-shopping" size={13} color="#5b7567" />
                 <TextInput
                     value={name}
                     onChangeText={setName}
-                    placeholder="Ex: Blueberries"
+                    placeholder={t("planner.namePlaceholder") || "Ex: Blueberries"}
                     className="ml-3 flex-1 text-base text-foreground"
                     placeholderTextColor="#8aa397"
                 />
             </View>
 
             {/* QUANTITY */}
-            <Text className="mt-4 text-sm font-semibold text-foreground">Quantity</Text>
+            <Text className="mt-4 text-sm font-semibold text-foreground">
+                {t("planner.quantity") || "Quantity"}
+            </Text>
             <View className="mt-2 flex-row items-center rounded-2xl border border-border bg-muted px-4 py-3">
                 <FontAwesome6 name="hashtag" size={13} color="#5b7567" />
                 <TextInput
@@ -70,14 +74,18 @@ const PlannerFormCard = () => {
                     placeholder="1"
                     placeholderTextColor="#8aa397"
                     className="ml-3 flex-1 text-base text-foreground"
-                />  
+                />
             </View>
 
             {/* CATEGORIES */}
-            <Text className="mt-4 text-sm font-semibold text-foreground">Category</Text>
+            <Text className="mt-4 text-sm font-semibold text-foreground">
+                {t("planner.category") || "Category"}
+            </Text>
             <View className="mt-2 flex-row flex-wrap gap-2">
                 {categories.map((option) => {
                     const active = option === category;
+                    const translatedCategory = t(`categories.${option.toLowerCase()}`) || option;
+
                     return (
                         <Pressable
                             key={option}
@@ -96,7 +104,7 @@ const PlannerFormCard = () => {
                                     active ? "text-primary-foreground" : "text-secondary-foreground"
                                 }`}
                             >
-                                {option}
+                                {translatedCategory}
                             </Text>
                         </Pressable>
                     );
@@ -104,11 +112,15 @@ const PlannerFormCard = () => {
             </View>
 
             {/* PRIORITY */}
-            <Text className="mt-4 text-sm font-semibold text-foreground">Priority</Text>
+            <Text className="mt-4 text-sm font-semibold text-foreground">
+                {t("planner.priority") || "Priority"}
+            </Text>
             <View className="mt-2 flex-row gap-2">
                 {priorities.map((option) => {
                     const active = option === priority;
                     const icon = option === "high" ? "bolt" : option === "medium" ? "compass" : "seedling";
+                    const translatedPriority = t(`priorities.${option}`) || option;
+
                     return (
                         <Pressable
                             key={option}
@@ -123,7 +135,7 @@ const PlannerFormCard = () => {
                                     active ? "text-primary-foreground" : "text-secondary-foreground"
                                 }`}
                             >
-                                {option}
+                                {translatedPriority}
                             </Text>
                         </Pressable>
                     );
@@ -143,16 +155,17 @@ const PlannerFormCard = () => {
                         canCreate ? "text-primary-foreground" : "text-muted-foreground"
                     }`}
                 >
-                    Add to Grocery List
+                    {t("planner.addButton") || "Add to Grocery List"}
                 </Text>
             </Pressable>
 
             {error ? (
                 <View className="mt-3 rounded-2xl border border-destructive bg-destructive px-3 py-2">
-                    <Text className="text-sm text-white text-center uppercase">{error}</Text>
+                    <Text className="text-center text-sm uppercase text-white">{error}</Text>
                 </View>
             ) : null}
         </View>
     );
 };
+
 export default PlannerFormCard;

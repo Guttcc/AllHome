@@ -1,3 +1,4 @@
+import { useLanguage } from "@/lib/i18n";
 import { useGroceryStore } from "@/store/grocery-store";
 import { Text, View } from "react-native";
 
@@ -11,6 +12,7 @@ const categoryColors: Record<string, string> = {
 
 export default function InsightsCategorySection() {
     const { items } = useGroceryStore();
+    const { t } = useLanguage();
     const total = items.length;
 
     const categories = items.reduce<Record<string, number>>((acc, item) => {
@@ -22,18 +24,20 @@ export default function InsightsCategorySection() {
     return (
         <View className="rounded-3xl border border-border bg-card p-4">
             <View className="flex-row items-center justify-between">
-                <Text className="text-sm font-semibold text-foreground">Items by category</Text>
+                <Text className="text-sm font-semibold text-foreground">{t("insights.itemsByCategory")}</Text>
                 <Text className="text-xs uppercase tracking-[1px] text-muted-foreground">
-                    {categoryEntries.length} groups
+                    {categoryEntries.length} {t("status.groups")}
                 </Text>
             </View>
 
             {categoryEntries.map(([category, count]) => {
                 const widthPercent = total ? Math.max(10, Math.round((count / total) * 100)) : 10;
+                const translatedCategory = t(`categories.${category.toLowerCase()}`) || category;
+
                 return (
                     <View key={category} className="mt-3">
                         <View className="mb-1 flex-row items-center justify-between">
-                            <Text className="text-sm font-medium text-foreground">{category}</Text>
+                            <Text className="text-sm font-medium text-foreground">{translatedCategory}</Text>
                             <Text className="text-sm text-muted-foreground">{count}</Text>
                         </View>
                         <View className="overflow-hidden rounded-full bg-secondary">
@@ -52,7 +56,7 @@ export default function InsightsCategorySection() {
             {categoryEntries.length === 0 ? (
                 <View className="mt-3 rounded-2xl bg-muted px-4 py-3">
                     <Text className="text-sm text-muted-foreground">
-                        Add items to reveal your category mix.
+                        {t("insights.addItemsMix")}
                     </Text>
                 </View>
             ) : null}
