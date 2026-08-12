@@ -35,14 +35,20 @@ const PlannerFormCard = () => {
     };
 
     const createItem = async (targetGroupId: string | null = null) => {
-        await addItem({
-            name: name.trim(),
-            category,
-            priority,
-            quantity: Number(quantity) || 1,
-            groupId: targetGroupId,
-            createdByName: currentUserName,
-        });
+        if (!user?.id) return;
+
+        // ⚠️ Enviamos user.id como 2º parámetro a addItem
+        await addItem(
+            {
+                name: name.trim(),
+                category,
+                priority,
+                quantity: Number(quantity) || 1,
+                groupId: targetGroupId,
+                createdByName: currentUserName,
+            },
+            user.id
+        );
 
         setName("");
         setQuantity("1");
@@ -166,7 +172,7 @@ const PlannerFormCard = () => {
                 </Text>
             </Pressable>
 
-            {/* BOTÓN 2: LISTA FAMILIAR (Si pertenece a algún grupo) */}
+            {/* BOTÓN 2: LISTA FAMILIAR */}
             {groups.length > 0 && activeGroup && (
                 <Pressable
                     className={`mt-2 flex-row items-center justify-center rounded-2xl border border-primary py-3 ${

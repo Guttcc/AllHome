@@ -8,6 +8,10 @@ export const allhomeItems = pgTable("allhome_items", {
     purchased: boolean("purchased").notNull().default(false),
     priority: text("priority").notNull().default("medium"),
     updated_at: bigint("updated_at", { mode: "number" }).notNull(),
+
+    userId: text("user_id"),
+    groupId: text("group_id"),
+    createdByName: text("created_by_name"),
 });
 
 export const groups = pgTable("groups", {

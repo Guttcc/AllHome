@@ -1,8 +1,9 @@
 import { createGroceryItem, listGroceryItems } from "@/lib/server/db-actions";
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        const items = await listGroceryItems();
+        const userId = request.headers.get("x-user-id") ?? undefined;
+        const items = await listGroceryItems(userId);
 
         return Response.json({ items });
     } catch (error) {
@@ -14,14 +15,23 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
+        const userId = request.headers.get("x-user-id") ?? undefined;
         const body = await request.json();
-        const { name, category, quantity, priority } = body;
+        const { name, category, quantity, priority, groupId, createdByName } = body;
 
         if (!name || !category || !priority) {
-        return Response.json({ error: "Please provide all required fields." }, { status: 400 });
+            return Response.json({ error: "Please provide all required fields." }, { status: 400 });
         }
 
-        const item = await createGroceryItem({ name, category, quantity, priority });
+        const item = await createGroceryItem({
+            name,
+            category,
+            quantity,
+            priority,
+            groupId: groupId ?? null,
+            createdByName: createdByName ?? null,
+            userId,
+        });
 
         return Response.json({ item }, { status: 201 });
     } catch (error) {

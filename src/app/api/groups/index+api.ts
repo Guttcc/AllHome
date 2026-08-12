@@ -15,7 +15,7 @@ export async function GET(request: Request) {
         const userId = getUserIdFromRequest(request);
 
         if (!userId) {
-            return Response.json([]);
+            return Response.json([], { status: 200 });
         }
 
         const userGroups = await db

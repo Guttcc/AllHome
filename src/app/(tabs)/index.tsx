@@ -8,10 +8,17 @@ import TabScreenBackground from "@/components/TabScreenBackground";
 import { useLanguage } from "@/lib/i18n";
 
 export default function ListScreen() {
-    const { items } = useGroceryStore();
+    const { items, activeContext } = useGroceryStore();
     const { t } = useLanguage(); 
 
-    const pendingItems = items.filter((item) => !item.purchased);
+    const contextItems = items.filter((item) => {
+        if (activeContext === "personal") {
+            return !item.groupId; // Muestra solo ítems sin grupo
+        }
+        return item.groupId === activeContext; // Muestra ítems del grupo seleccionado
+    });
+
+    const pendingItems = contextItems.filter((item) => !item.purchased);
 
     return (
         <FlatList
