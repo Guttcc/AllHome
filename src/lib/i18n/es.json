@@ -92,6 +92,7 @@
     "addedBy": "Añadido por",
     "enterGroupName": "Nombre del grupo",
     "enterCode": "Código o link de invitación",
-    "defaultUser": "Usuario"
+    "defaultUser": "Usuario",
+    "copyInviteCode": "Copiar código de invitación"
   }
 }

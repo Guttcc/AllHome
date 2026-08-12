@@ -35,7 +35,7 @@ type ItemResponse = { item: GroceryItem };
 type GroceryStore = {
     items: GroceryItem[];
     groups: FamilyGroup[];
-    activeContext: "personal" | string; // "personal" o el ID del grupo activo
+    activeContext: "personal" | string;
     isLoading: boolean;
     error: string | null;
 
@@ -49,7 +49,7 @@ type GroceryStore = {
     setActiveContext: (context: "personal" | string) => void;
     createGroup: (name: string, userId?: string) => Promise<FamilyGroup | void>;
     joinGroup: (codeOrLink: string, userId?: string) => Promise<FamilyGroup | void>;
-    leaveGroup: (groupId: string) => Promise<void>;
+    leaveGroup: (groupId: string, userId?: string) => Promise<void>; // <-- ¡AQUÍ ESTABA EL ERROR DE TIPO!
 };
 
 export const useGroceryStore = create<GroceryStore>((set, get) => ({
@@ -67,9 +67,9 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
         set({ isLoading: true, error: null });
         try {
             const res = await fetch("/api/items");
-            const payload = (await res.json()) as ItemsResponse;
-
             if (!res.ok) throw new Error(`Request failed (${res.status})`);
+
+            const payload = (await res.json()) as ItemsResponse;
             set({ items: payload.items });
         } catch (error) {
             console.error("Error loading items:", error);
@@ -96,8 +96,9 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                     createdByName: input.createdByName ?? null,
                 }),
             });
-            const payload = (await res.json()) as ItemResponse;
+
             if (!res.ok) throw new Error(`Request failed (${res.status})`);
+            const payload = (await res.json()) as ItemResponse;
 
             set((state) => ({ items: [payload.item, ...state.items] }));
             return payload.item;
@@ -117,8 +118,10 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ quantity: nextQuantity }),
             });
-            const payload = (await res.json()) as ItemResponse;
+
             if (!res.ok) throw new Error(`Request failed (${res.status})`);
+            const payload = (await res.json()) as ItemResponse;
+
             set((state) => ({
                 items: state.items.map((item) => (item.id === id ? payload.item : item)),
             }));
@@ -141,8 +144,8 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 body: JSON.stringify({ purchased: nextPurchased }),
             });
 
-            const payload = (await res.json()) as ItemResponse;
             if (!res.ok) throw new Error(`Request failed (${res.status})`);
+            const payload = (await res.json()) as ItemResponse;
 
             set((state) => ({
                 items: state.items.map((item) => (item.id === id ? payload.item : item)),
@@ -189,8 +192,13 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, userId }),
             });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`Request failed (${res.status}): ${errorText}`);
+            }
+
             const newGroup = (await res.json()) as FamilyGroup;
-            if (!res.ok) throw new Error(`Request failed (${res.status})`);
 
             set((state) => ({
                 groups: [...state.groups, newGroup],
@@ -212,8 +220,13 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ code: cleanCode, userId }),
             });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`Request failed (${res.status}): ${errorText}`);
+            }
+
             const joinedGroup = (await res.json()) as FamilyGroup;
-            if (!res.ok) throw new Error(`Request failed (${res.status})`);
 
             set((state) => ({
                 groups: [...state.groups.filter((g) => g.id !== joinedGroup.id), joinedGroup],
@@ -226,10 +239,20 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
         }
     },
 
-    leaveGroup: async (groupId: string) => {
+    leaveGroup: async (groupId: string, userId?: string) => {
         set({ error: null });
         try {
-            await fetch(`/api/groups/${groupId}/leave`, { method: "POST" });
+            const res = await fetch(`/api/groups/${groupId}/leave`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId }),
+            });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`Request failed (${res.status}): ${errorText}`);
+            }
+
             set((state) => ({
                 groups: state.groups.filter((g) => g.id !== groupId),
                 activeContext: state.activeContext === groupId ? "personal" : state.activeContext,

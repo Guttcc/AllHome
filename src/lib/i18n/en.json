@@ -92,6 +92,7 @@
     "addedBy": "Added by",
     "enterGroupName": "Group name",
     "enterCode": "Invite code or link",
-    "defaultUser": "User"
+    "defaultUser": "User",
+    "copyInviteCode": "Copy invite code"
   }
 }

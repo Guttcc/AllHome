@@ -1,8 +1,10 @@
 import { useLanguage } from "@/lib/i18n";
 import { useGroceryStore } from "@/store/grocery-store";
+import { useUser } from "@clerk/expo";
 import { Alert, Pressable, Text } from "react-native";
 
 export default function LeaveGroupButton() {
+    const { user } = useUser();
     const { activeContext, groups, leaveGroup } = useGroceryStore();
     const { t } = useLanguage();
 
@@ -11,6 +13,8 @@ export default function LeaveGroupButton() {
     const currentGroup = groups.find((g) => g.id === activeContext);
 
     const handleLeave = () => {
+        if (!user?.id) return;
+
         Alert.alert(
             t("groups.leaveTitle") || "Salir del grupo",
             `${t("groups.leaveConfirm") || "¿Estás seguro de que deseas salir de este grupo?"} (${currentGroup?.name || ""})`,
@@ -19,7 +23,7 @@ export default function LeaveGroupButton() {
                 {
                     text: t("groups.leave") || "Salir",
                     style: "destructive",
-                    onPress: () => leaveGroup(activeContext),
+                    onPress: () => leaveGroup(activeContext, user.id),
                 },
             ]
         );

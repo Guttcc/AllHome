@@ -2,6 +2,7 @@ import ClearCompletedButton from "@/components/insights/ClearCompletedButton";
 import InsightsCategorySection from "@/components/insights/InsightsCategorySection";
 import InsightsPrioritySection from "@/components/insights/InsightsPrioritySection";
 import InsightsStatsSection from "@/components/insights/InsightsStatsSection";
+import InviteGroupButton from "@/components/insights/InviteGroupButton";
 import LeaveGroupButton from "@/components/insights/LeaveGroupButton";
 import SentryFeedbackButton from "@/components/insights/SentryFeedbackButton";
 import UserProfile from "@/components/insights/UserProfile";
@@ -24,6 +25,7 @@ const InsightsScreen = () => {
                 <InsightsCategorySection />
                 <InsightsPrioritySection />
                 <ClearCompletedButton />
+                <InviteGroupButton />
                 <LeaveGroupButton />
             </ScrollView>
 

@@ -55,31 +55,26 @@ export async function POST(request: Request) {
         const inviteCode = crypto.randomUUID().replace(/-/g, "").substring(0, 6).toUpperCase();
         const now = Date.now();
 
-        // Operación atómica con transacción
-        const newGroup = await db.transaction(async (tx) => {
-            const [insertedGroup] = await tx
-                .insert(groups)
-                .values({
-                    id: groupId,
-                    name: name.trim(),
-                    code: inviteCode,
-                    createdById: userId,
-                    createdAt: now,
-                })
-                .returning();
+        const [insertedGroup] = await db
+            .insert(groups)
+            .values({
+                id: groupId,
+                name: name.trim(),
+                code: inviteCode,
+                createdById: userId,
+                createdAt: now,
+            })
+            .returning();
 
-            await tx.insert(groupMembers).values({
-                id: memberId,
-                groupId: insertedGroup.id,
-                userId: userId,
-                role: "owner",
-                joinedAt: now,
-            });
-
-            return insertedGroup;
+        await db.insert(groupMembers).values({
+            id: memberId,
+            groupId: insertedGroup.id,
+            userId: userId,
+            role: "owner",
+            joinedAt: now,
         });
 
-        return Response.json(newGroup, { status: 201 });
+        return Response.json(insertedGroup, { status: 201 });
     } catch (error) {
         console.error("Error creating group:", error);
         return Response.json({ error: "Internal Server Error" }, { status: 500 });
