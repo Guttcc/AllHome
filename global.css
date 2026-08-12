@@ -6,8 +6,9 @@
   :root {
     --background: 90 100% 97%; /*fondo*/
     --foreground: 146 52% 15%;
-    --card2: 0 0% 100%;
     --card: 0 0% 100%;
+    --card2: 0 0% 100%;
+    --card3: 0 0% 100%;
     --card-foreground: 146 52% 15%;
     --primary: 147 75% 33%;
     --primary-foreground: 0 0% 100%;
@@ -34,8 +35,9 @@
     :root {
       --background: 162 80% 8%; /*fondo*/
       --foreground: 136 42% 92%; /*letras*/
-      --card2: 159 47% 10%;
       --card: 162 100% 17%; /*paneles*/
+      --card2: 159 47% 10%;
+      --card3: 162 45% 17%;
       --card-foreground: 136 42% 92%; /*letras*/
       --primary: 152 50% 34%; /*principal*/
       --primary-foreground: 150 35% 100%; /*letras*/

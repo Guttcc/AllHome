@@ -50,7 +50,7 @@ export default function SignInScreen() {
 
                 <View className="mt-6">
                     <Pressable
-                        className={`mb-3 h-14 flex-row items-center rounded-2xl border border-border bg-card px-4 active:opacity-90 ${
+                        className={`mb-3 h-14 flex-row items-center rounded-2xl border border-border bg-card3 px-4 active:opacity-90 ${
                             isLoading ? "opacity-70" : ""
                         }`}
                         disabled={isLoading}
@@ -71,7 +71,7 @@ export default function SignInScreen() {
                     </Pressable>
 
                     <Pressable
-                        className={`mb-3 h-14 flex-row items-center rounded-2xl border border-border bg-card px-4 active:opacity-90 ${
+                        className={`mb-3 h-14 flex-row items-center rounded-2xl border border-border bg-card3 px-4 active:opacity-90 ${
                             isLoading ? "opacity-70" : ""
                         }`}
                         disabled={isLoading}
