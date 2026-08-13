@@ -34,7 +34,8 @@
     "quantity": "Cantidad",
     "category": "Categoría",
     "priority": "Prioridad",
-    "addButton": "Añadir a la lista"
+    "addButton": "Añadir a la lista",
+    "addedBy": "Añadido por"
   },
   "insights": {
     "itemsByCategory": "Artículos por categoría",
@@ -89,7 +90,6 @@
     "cancel": "Cancel",
     "leave": "Salir",
     "addToGroup": "Añadir a",
-    "addedBy": "Añadido por",
     "enterGroupName": "Nombre del grupo",
     "enterCode": "Código o link de invitación",
     "defaultUser": "Usuario",

@@ -11,7 +11,6 @@ export const allhomeItems = pgTable("allhome_items", {
 
     userId: text("user_id"),
     groupId: text("group_id"),
-    createdByName: text("created_by_name"),
 });
 
 export const groups = pgTable("groups", {

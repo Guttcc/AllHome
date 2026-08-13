@@ -7,7 +7,7 @@ export default function ClearCompletedButton() {
     const { t } = useLanguage();
 
     return (
-        <Pressable className="rounded-2xl bg-primary py-3" onPress={clearPurchased}>
+        <Pressable className="rounded-2xl bg-primary py-3" onPress={() => clearPurchased()}>
             <Text className="text-center text-base font-semibold text-primary-foreground">
                 {t("planner.clearCompleted")}
             </Text>

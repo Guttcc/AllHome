@@ -17,7 +17,6 @@ export type GroceryItem = {
     purchased: boolean;
     priority: GroceryPriority;
     groupId?: string | null;
-    createdByName?: string | null;
 };
 
 export type CreateItemInput = {
@@ -26,7 +25,6 @@ export type CreateItemInput = {
     quantity: number;
     priority: GroceryPriority;
     groupId?: string | null;
-    createdByName?: string | null;
 };
 
 type ItemsResponse = { items: GroceryItem[] };
@@ -38,6 +36,7 @@ type GroceryStore = {
     activeContext: "personal" | string;
     isLoading: boolean;
     error: string | null;
+    currentUserId: string | null;
 
     loadItems: (userId?: string) => Promise<void>;
     addItem: (input: CreateItemInput, userId?: string) => Promise<GroceryItem | void>;
@@ -59,16 +58,16 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     activeContext: "personal",
     isLoading: false,
     error: null,
+    currentUserId: null,
 
     setActiveContext: (context) => {
         set({ activeContext: context });
     },
 
     switchUser: async (userId?: string) => {
-        set({ items: [], groups: [], activeContext: "personal", error: null, isLoading: true });
+        set({ items: [], groups: [], activeContext: "personal", error: null, isLoading: true, currentUserId: userId ?? null });
         try {
             if (userId) {
-                // 1. Cargar los grupos del usuario actual
                 const groupsRes = await fetch("/api/groups", {
                     headers: { "x-user-id": userId },
                 });
@@ -77,13 +76,12 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                     userGroups = await groupsRes.json();
                 }
 
-                // 2. Cargar los ítems del usuario actual
                 const itemsRes = await fetch("/api/items", {
                     headers: { "x-user-id": userId },
                 });
                 let userItems: GroceryItem[] = [];
                 if (itemsRes.ok) {
-                    const payload = (await itemsRes.json()) as ItemsResponse;
+                    const payload = (await itemsRes.json()) as { items: GroceryItem[] };
                     userItems = payload.items;
                 }
 
@@ -98,16 +96,17 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     },
 
     loadItems: async (userId) => {
+        const activeUserId = userId ?? get().currentUserId;
         set({ isLoading: true, error: null });
         try {
             const res = await fetch("/api/items", {
                 headers: {
-                    ...(userId ? { "x-user-id": userId } : {}),
+                    ...(activeUserId ? { "x-user-id": activeUserId } : {}),
                 },
             });
             if (!res.ok) throw new Error(`Request failed (${res.status})`);
 
-            const payload = (await res.json()) as ItemsResponse;
+            const payload = (await res.json()) as { items: GroceryItem[] };
             set({ items: payload.items });
         } catch (error) {
             console.error("Error loading items:", error);
@@ -118,6 +117,7 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     },
 
     addItem: async (input, userId) => {
+        const activeUserId = userId ?? get().currentUserId;
         set({ error: null });
         try {
             const targetGroupId = input.groupId !== undefined
@@ -127,8 +127,8 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
             const headers: Record<string, string> = {
                 "Content-Type": "application/json",
             };
-            if (userId) {
-                headers["x-user-id"] = userId;
+            if (activeUserId) {
+                headers["x-user-id"] = activeUserId;
             }
 
             const res = await fetch("/api/items", {
@@ -140,8 +140,7 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                     quantity: Math.max(1, input.quantity),
                     priority: input.priority,
                     groupId: targetGroupId,
-                    createdByName: input.createdByName ?? null,
-                    userId: userId ?? null,
+                    userId: activeUserId ?? null,
                 }),
             });
 
@@ -157,6 +156,7 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     },
 
     updateQuantity: async (id, quantity, userId) => {
+        const activeUserId = userId ?? get().currentUserId;
         const nextQuantity = Math.max(1, quantity);
         set({ error: null });
 
@@ -165,7 +165,7 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 method: "PATCH",
                 headers: { 
                     "Content-Type": "application/json",
-                    ...(userId ? { "x-user-id": userId } : {}),
+                    ...(activeUserId ? { "x-user-id": activeUserId } : {}),
                 },
                 body: JSON.stringify({ quantity: nextQuantity }),
             });
@@ -174,7 +174,13 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
             const payload = (await res.json()) as ItemResponse;
 
             set((state) => ({
-                items: state.items.map((item) => (item.id === id ? payload.item : item)),
+                items: state.items.map((item) => {
+                    if (item.id !== id) return item;
+                    return { 
+                        ...item, 
+                        ...payload.item,
+                    };
+                }),
             }));
         } catch (error) {
             console.error("Error updating quantity:", error);
@@ -183,6 +189,7 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     },
 
     togglePurchased: async (id, userId) => {
+        const activeUserId = userId ?? get().currentUserId;
         const currentItem = get().items.find((item) => item.id === id);
         if (!currentItem) return;
 
@@ -193,7 +200,7 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 method: "PATCH",
                 headers: { 
                     "Content-Type": "application/json",
-                    ...(userId ? { "x-user-id": userId } : {}),
+                    ...(activeUserId ? { "x-user-id": activeUserId } : {}),
                 },
                 body: JSON.stringify({ purchased: nextPurchased }),
             });
@@ -202,7 +209,13 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
             const payload = (await res.json()) as ItemResponse;
 
             set((state) => ({
-                items: state.items.map((item) => (item.id === id ? payload.item : item)),
+                items: state.items.map((item) => {
+                    if (item.id !== id) return item;
+                    return { 
+                        ...item, 
+                        ...payload.item,
+                    };
+                }),
             }));
         } catch (error) {
             console.error("Error toggling purchased:", error);
@@ -211,12 +224,13 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     },
 
     removeItem: async (id, userId) => {
+        const activeUserId = userId ?? get().currentUserId;
         set({ error: null });
         try {
             const res = await fetch(`/api/items/${id}`, { 
                 method: "DELETE",
                 headers: {
-                    ...(userId ? { "x-user-id": userId } : {}),
+                    ...(activeUserId ? { "x-user-id": activeUserId } : {}),
                 },
             });
             if (!res.ok) throw new Error(`Request failed (${res.status})`);
@@ -229,12 +243,13 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     },
 
     clearPurchased: async (userId) => {
+        const activeUserId = userId ?? get().currentUserId;
         set({ error: null });
         try {
             const res = await fetch("/api/items/clear-purchased", { 
                 method: "POST",
                 headers: {
-                    ...(userId ? { "x-user-id": userId } : {}),
+                    ...(activeUserId ? { "x-user-id": activeUserId } : {}),
                 },
             });
             if (!res.ok) throw new Error(`Request failed (${res.status})`);
@@ -247,17 +262,17 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
         }
     },
 
-    // Métodos de grupos
     createGroup: async (name: string, userId?: string) => {
+        const activeUserId = userId ?? get().currentUserId;
         set({ error: null });
         try {
             const res = await fetch("/api/groups", {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    ...(userId ? { "x-user-id": userId } : {}),
+                    ...(activeUserId ? { "x-user-id": activeUserId } : {}),
                 },
-                body: JSON.stringify({ name, userId }),
+                body: JSON.stringify({ name, userId: activeUserId }),
             });
 
             if (!res.ok) {
@@ -272,8 +287,8 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 activeContext: newGroup.id,
             }));
 
-            if (userId) {
-                await get().loadItems(userId);
+            if (activeUserId) {
+                await get().loadItems(activeUserId);
             }
 
             return newGroup;
@@ -284,6 +299,7 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     },
 
     joinGroup: async (codeOrLink: string, userId?: string) => {
+        const activeUserId = userId ?? get().currentUserId;
         set({ error: null });
         try {
             const cleanCode = codeOrLink.trim().toUpperCase();
@@ -291,9 +307,9 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    ...(userId ? { "x-user-id": userId } : {}),
+                    ...(activeUserId ? { "x-user-id": activeUserId } : {}),
                 },
-                body: JSON.stringify({ code: cleanCode, userId }),
+                body: JSON.stringify({ code: cleanCode, userId: activeUserId }),
             });
 
             if (!res.ok) {
@@ -308,8 +324,8 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 activeContext: joinedGroup.id,
             }));
 
-            if (userId) {
-                await get().loadItems(userId);
+            if (activeUserId) {
+                await get().loadItems(activeUserId);
             }
 
             return joinedGroup;
@@ -320,15 +336,16 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     },
 
     leaveGroup: async (groupId: string, userId?: string) => {
+        const activeUserId = userId ?? get().currentUserId;
         set({ error: null });
         try {
             const res = await fetch(`/api/groups/${groupId}/leave`, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    ...(userId ? { "x-user-id": userId } : {}),
+                    ...(activeUserId ? { "x-user-id": activeUserId } : {}),
                 },
-                body: JSON.stringify({ userId }),
+                body: JSON.stringify({ userId: activeUserId }),
             });
 
             if (!res.ok) {

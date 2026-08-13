@@ -34,7 +34,8 @@
     "quantity": "Quantity",
     "category": "Category",
     "priority": "Priority",
-    "addButton": "Add to Grocery List"
+    "addButton": "Add to Grocery List",
+    "addedBy": "Added by"
   },
   "insights": {
     "itemsByCategory": "Items by category",

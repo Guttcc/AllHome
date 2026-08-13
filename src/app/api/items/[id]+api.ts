@@ -8,9 +8,9 @@ export async function PATCH(request: Request, { id }: { id: string }) {
     try {
         const body = await request.json();
 
-        const item = body.quantity
-        ? await updateGroceryItemQuantity(id, body.quantity)
-        : await setGroceryItemPurchased(id, body.purchased ?? true);
+        const item = body.quantity !== undefined
+            ? await updateGroceryItemQuantity(id, body.quantity)
+            : await setGroceryItemPurchased(id, body.purchased ?? true);
 
         if (!item) return Response.json({ error: "Item not found." }, { status: 404 });
 

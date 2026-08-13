@@ -5,10 +5,9 @@ export async function GET(request: Request) {
         const userId = request.headers.get("x-user-id") ?? undefined;
         const items = await listGroceryItems(userId);
 
-        return Response.json({ items });
+        return Response.json({ items: items || [] });
     } catch (error) {
         const message = error instanceof Error ? error.message : "Failed to fetch items";
-
         return Response.json({ error: message }, { status: 500 });
     }
 }
@@ -17,7 +16,7 @@ export async function POST(request: Request) {
     try {
         const userId = request.headers.get("x-user-id") ?? undefined;
         const body = await request.json();
-        const { name, category, quantity, priority, groupId, createdByName } = body;
+        const { name, category, quantity, priority, groupId } = body;
 
         if (!name || !category || !priority) {
             return Response.json({ error: "Please provide all required fields." }, { status: 400 });
@@ -29,7 +28,6 @@ export async function POST(request: Request) {
             quantity,
             priority,
             groupId: groupId ?? null,
-            createdByName: createdByName ?? null,
             userId,
         });
 

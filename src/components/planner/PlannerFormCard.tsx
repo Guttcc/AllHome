@@ -8,7 +8,7 @@ import { Pressable, Text, TextInput, View } from "react-native";
 const categories: GroceryCategory[] = ["Produce", "Dairy", "Bakery", "Pantry", "Snacks"];
 const priorities: GroceryPriority[] = ["low", "medium", "high"];
 
-const categoryIcons = {
+const categoryIcons: Record<GroceryCategory, string> = {
     Produce: "leaf",
     Dairy: "cow",
     Bakery: "bread-slice",
@@ -27,7 +27,6 @@ const PlannerFormCard = () => {
     const [priority, setPriority] = useState<GroceryPriority>("medium");
 
     const canCreate = name.trim().length > 0;
-    const currentUserName = user?.firstName || user?.fullName || t("groups.defaultUser") || "Usuario";
     const activeGroup = groups.find((g) => g.id === activeContext) || groups[0];
 
     const handleQuantityChange = (value: string) => {
@@ -37,7 +36,6 @@ const PlannerFormCard = () => {
     const createItem = async (targetGroupId: string | null = null) => {
         if (!user?.id) return;
 
-        // ⚠️ Enviamos user.id como 2º parámetro a addItem
         await addItem(
             {
                 name: name.trim(),
@@ -45,7 +43,6 @@ const PlannerFormCard = () => {
                 priority,
                 quantity: Number(quantity) || 1,
                 groupId: targetGroupId,
-                createdByName: currentUserName,
             },
             user.id
         );

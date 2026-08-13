@@ -46,13 +46,6 @@ const PendingItemCard = ({ item }: { item: GroceryItem }) => {
                                 {translatedCategory}
                             </Text>
                         </View>
-
-                        {/* ETIQUETA DE AUTORÍA DEL PRODUCTO */}
-                        {item.createdByName && (
-                            <Text className="text-xs italic text-muted-foreground">
-                                Añadido por: {item.createdByName}
-                            </Text>
-                        )}
                     </View>
 
                     <View className="mt-3 flex-row items-center gap-2">

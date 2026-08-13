@@ -23,11 +23,23 @@ export const listGroceryItems = async (userId?: string) => {
             conditions.push(inArray(allhomeItems.groupId, groupIds));
         }
 
-        return await db
+        const rawItems = await db
             .select()
             .from(allhomeItems)
             .where(or(...conditions))
             .orderBy(desc(allhomeItems.updated_at));
+
+        return rawItems.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            category: item.category,
+            quantity: item.quantity,
+            purchased: item.purchased,
+            priority: item.priority,
+            updated_at: item.updated_at,
+            userId: item.userId ?? item.user_id ?? null,
+            groupId: item.groupId ?? item.group_id ?? null,
+        }));
     } catch (error) {
         console.error("Error filtering items by user/group:", error);
         return [];
@@ -40,7 +52,6 @@ export const createGroceryItem = async (input: {
     quantity: number;
     priority: string;
     groupId?: string | null;
-    createdByName?: string | null;
     userId?: string;
 }) => {
     const rows = await db
@@ -54,12 +65,11 @@ export const createGroceryItem = async (input: {
             priority: input.priority,
             updated_at: Date.now(),
             groupId: input.groupId ?? null,
-            createdByName: input.createdByName ?? null,
             userId: input.userId ?? null,
         })
         .returning();
 
-    return rows[0]; 
+    return rows[0];
 };
 
 export const setGroceryItemPurchased = async (id: string, purchased: boolean) => {
