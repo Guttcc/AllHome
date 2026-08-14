@@ -1,43 +1,46 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "AllHome",
+    "slug": "allhome",
     "version": "1.0.0",
+    "scheme": "allhome",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#FFFFFF",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.myapp"
+      "package": "com.cammilo.allhome"
     },
     "web": {
       "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "@clerk/expo",
+      [
+        "@clerk/expo",
+        {
+          "publishableKey": "pk_test_cmFwaWQtYmFybmFjbGUtODAuY2xlcmsuYWNjb3VudHMuZGV2JA"
+        }
+      ],
       "expo-router",
       "expo-localization",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash-icon.png",
+          "backgroundColor": "#FFFFFF",
+          "image": "./assets/images/android-icon-foreground.png",
           "imageWidth": 76
         }
       ],
       "expo-image",
-      "@clerk/expo",
       [
         "@sentry/react-native/expo",
         {
@@ -45,11 +48,19 @@
           "project": "allhome",
           "organization": "camilo-dev"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "owner": "cammilo_gutcc",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "055ea6d8-521e-4ad5-9531-69898ea3aa93"
+      }
     }
   }
 }

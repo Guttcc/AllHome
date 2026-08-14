@@ -1,18 +1,16 @@
+import { FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useSocialAuth from "../../hooks/useSocialAuth";
-import { useLanguage } from "../../lib/i18n"; // 1. Importamos nuestro hook de idioma
-
-import { FontAwesome } from "@expo/vector-icons";
+import { useLanguage } from "../../lib/i18n";
 
 export default function SignInScreen() {
     const { handleSocialAuth, loadingStrategy } = useSocialAuth();
-    const { t, changeLanguage, locale } = useLanguage(); // 2. Obtenemos las funciones de i18n
+    const { t, changeLanguage, locale } = useLanguage();
 
     const isGoogleClicked = loadingStrategy === "oauth_google";
     const isGitHubClicked = loadingStrategy === "oauth_github";
-
     const isLoading = isGitHubClicked || isGoogleClicked;
 
     const toggleLanguage = () => {
@@ -22,7 +20,6 @@ export default function SignInScreen() {
 
     return (
         <SafeAreaView className="flex-1 bg-primary dark:bg-secondary" edges={["top"]}>
-            {/* Decorative elements */}
             <View className="absolute -left-16 top-12 h-56 w-56 rounded-full bg-primary/80 dark:bg-background/40" />
             <View className="absolute right-[-74px] top-40px h-72 w-72 rounded-full bg-primary/70 dark:bg-background/35" />
 
@@ -43,7 +40,6 @@ export default function SignInScreen() {
                     All Home 
                 </Text>
 
-                {/* Texto traducido */}
                 <Text className="mt-1 text-center text-[14px] text-primary-foreground/80 dark:text-foreground/75">
                     {t("auth.tagline")}
                 </Text>

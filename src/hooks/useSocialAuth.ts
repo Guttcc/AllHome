@@ -1,38 +1,32 @@
-import { useSSO } from "@clerk/expo";
+import { useOAuth } from "@clerk/expo";
 import { useState } from "react";
 import { Alert } from "react-native";
 
-const useSocialAuth = () => {
-  const [loadingStrategy, setLoadingStrategy] = useState<string | null>(null);
-  const { startSSOFlow } = useSSO();
+export default function useSocialAuth() {
+    const [loadingStrategy, setLoadingStrategy] = useState<string | null>(null);
+    const { startOAuthFlow: startGoogleFlow } = useOAuth({ strategy: "oauth_google" });
+    const { startOAuthFlow: startGithubFlow } = useOAuth({ strategy: "oauth_github" });
 
-  const handleSocialAuth = async (
-    strategy: "oauth_github" | "oauth_google",
-  ) => {
-    if (loadingStrategy) return;
+    const handleSocialAuth = async (strategy: "oauth_oauth_google" | "oauth_github" | string) => {
+        if (loadingStrategy) return;
+        setLoadingStrategy(strategy);
 
-    setLoadingStrategy(strategy);
+        try {
+            const startFlow = strategy === "oauth_google" ? startGoogleFlow : startGithubFlow;
+            
+            // Ejecutamos el flujo sin parámetros forzados para que Clerk use su manejador nativo
+            const { createdSessionId, setActive } = await startFlow();
 
-    try {
-      const { createdSessionId, setActive } = await startSSOFlow({ strategy });
+            if (createdSessionId && setActive) {
+                await setActive({ session: createdSessionId });
+            }
+        } catch (error) {
+            console.error("Auth error:", error);
+            Alert.alert("Error", "No se pudo completar la autenticación.");
+        } finally {
+            setLoadingStrategy(null);
+        }
+    };
 
-      if (!createdSessionId || !setActive) {
-        Alert.alert(
-          "Sign-in incomplete",
-          "Sign-in did not complete. Please try again.",
-        );
-        return;
-      }
-
-      await setActive({ session: createdSessionId });
-    } catch (error) {
-      console.log("💥 Error in social auth:", error);
-    } finally {
-      setLoadingStrategy(null);
-    }
-  };
-
-  return { handleSocialAuth, loadingStrategy };
-};
-
-export default useSocialAuth;
+    return { handleSocialAuth, loadingStrategy };
+}

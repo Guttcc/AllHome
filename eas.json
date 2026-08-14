@@ -1,0 +1,35 @@
+{
+  "cli": {
+    "version": ">= 12.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK": "1",
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_cmFwaWQtYmFybmFjbGUtODAuY2xlcmsuYWNjb3VudHMuZGV2JA",
+        "SENTRY_AUTH_TOKEN": "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",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://8409439f503ff1dc4e1f5aae393b0b69@o4511806829756416.ingest.de.sentry.io/4511894821470288"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK": "1",
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_cmFwaWQtYmFybmFjbGUtODAuY2xlcmsuYWNjb3VudHMuZGV2JA",
+        "SENTRY_AUTH_TOKEN": "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",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://8409439f503ff1dc4e1f5aae393b0b69@o4511806829756416.ingest.de.sentry.io/4511894821470288"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
