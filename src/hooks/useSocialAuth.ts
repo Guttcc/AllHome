@@ -1,21 +1,20 @@
-import { useOAuth } from "@clerk/expo";
+import { useSSO } from "@clerk/expo";
+import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
 import { Alert } from "react-native";
 
+WebBrowser.maybeCompleteAuthSession();
+
 export default function useSocialAuth() {
     const [loadingStrategy, setLoadingStrategy] = useState<string | null>(null);
-    const { startOAuthFlow: startGoogleFlow } = useOAuth({ strategy: "oauth_google" });
-    const { startOAuthFlow: startGithubFlow } = useOAuth({ strategy: "oauth_github" });
+    const { startSSOFlow } = useSSO();
 
-    const handleSocialAuth = async (strategy: "oauth_oauth_google" | "oauth_github" | string) => {
+    const handleSocialAuth = async (strategy: "oauth_google" | "oauth_github" | string) => {
         if (loadingStrategy) return;
         setLoadingStrategy(strategy);
 
         try {
-            const startFlow = strategy === "oauth_google" ? startGoogleFlow : startGithubFlow;
-            
-            // Ejecutamos el flujo sin parámetros forzados para que Clerk use su manejador nativo
-            const { createdSessionId, setActive } = await startFlow();
+            const { createdSessionId, setActive } = await startSSOFlow({ strategy: strategy as any });
 
             if (createdSessionId && setActive) {
                 await setActive({ session: createdSessionId });
