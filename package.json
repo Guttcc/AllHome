@@ -53,6 +53,9 @@
     "drizzle-kit": "^0.31.10",
     "typescript": "~6.0.3"
   },
+  "overrides": {
+    "react-native-worklets": "0.10.1"
+  },
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
