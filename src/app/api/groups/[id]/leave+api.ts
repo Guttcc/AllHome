@@ -22,7 +22,6 @@ export async function POST(
 
         let userId = getUserIdFromRequest(request);
 
-        // Si no viene en los headers, intentar leerlo del body
         if (!userId) {
             try {
                 const body = await request.json();
@@ -45,7 +44,6 @@ export async function POST(
             );
         }
 
-        // Eliminar la relación del usuario en el grupo
         await db
             .delete(groupMembers)
             .where(

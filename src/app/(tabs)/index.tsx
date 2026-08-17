@@ -13,9 +13,9 @@ export default function ListScreen() {
 
     const contextItems = items.filter((item) => {
         if (activeContext === "personal") {
-            return !item.groupId; // Muestra solo ítems sin grupo
+            return !item.groupId; 
         }
-        return item.groupId === activeContext; // Muestra ítems del grupo seleccionado
+        return item.groupId === activeContext; 
     });
 
     const pendingItems = contextItems.filter((item) => !item.purchased);

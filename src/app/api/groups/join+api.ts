@@ -27,7 +27,6 @@ export async function POST(request: Request) {
 
         const cleanCode = code.trim().toUpperCase();
 
-        // 1. Buscar el grupo por su código de invitación
         const [targetGroup] = await db
             .select()
             .from(groups)
@@ -37,7 +36,6 @@ export async function POST(request: Request) {
             return Response.json({ error: "No se encontró ningún grupo con ese código" }, { status: 404 });
         }
 
-        // 2. Comprobar si el usuario ya pertenece al grupo
         const existingMember = await db
             .select()
             .from(groupMembers)

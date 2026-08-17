@@ -7,7 +7,6 @@ import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 
 export default function TabsLayout() {
-  // 1. Extraemos userId directamente de Clerk
   const { isSignedIn, isLoaded, userId } = useAuth();
   const { loadItems } = useGroceryStore();
   const { t } = useLanguage();
@@ -16,7 +15,6 @@ export default function TabsLayout() {
   const isDark = colorScheme === "dark";
   const tabTintColor = isDark ? "hsl(142 70% 54%)" : "hsl(147 75% 33%)";
 
-  // 2. Cargamos los ítems enviando el userId una vez que el usuario esté autenticado
   useEffect(() => {
     if (isSignedIn && userId) {
       loadItems(userId);
