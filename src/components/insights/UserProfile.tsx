@@ -30,7 +30,7 @@ const UserProfile = () => {
 
                 <View className="flex-row items-center gap-2">
                     <View className="items-center gap-2">
-                        <ThemeToggle />
+                        
                         <Pressable
                             onPress={toggleLanguage}
                             className="h-9 px-3 flex-row items-center justify-center gap-1.5 rounded-xl border border-border bg-secondary"
@@ -41,6 +41,7 @@ const UserProfile = () => {
                             </Text>
                         </Pressable>
 
+                        <ThemeToggle />
                     </View>
 
                     <Pressable
