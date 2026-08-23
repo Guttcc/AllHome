@@ -1,3 +1,4 @@
+import ThemeToggle from "@/components/insights/ThemeToggle";
 import { FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Pressable, Text, View } from "react-native";
@@ -23,7 +24,7 @@ export default function SignInScreen() {
             <View className="absolute -left-16 top-12 h-56 w-56 rounded-full bg-primary/80 dark:bg-background/40" />
             <View className="absolute right-[-74px] top-40px h-72 w-72 rounded-full bg-primary/70 dark:bg-background/35" />
 
-            <View className="flex-row justify-end px-6 pt-2 z-10">
+            <View className="items-end gap-2 px-6 pt-2 z-10">
                 <Pressable
                     onPress={toggleLanguage}
                     className="flex-row items-center rounded-full border border-white/20 bg-white/10 px-3 py-1.5 active:opacity-80"
@@ -33,6 +34,8 @@ export default function SignInScreen() {
                         {locale.startsWith("es") ? "ES" : "EN"}
                     </Text>
                 </Pressable>
+
+                <ThemeToggle />
             </View>
 
             <View className="px-6 pt-2">
