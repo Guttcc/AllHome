@@ -1,3 +1,4 @@
+import ThemeToggle from "@/components/insights/ThemeToggle";
 import { useLanguage } from "@/lib/i18n";
 import { useClerk, useUser } from "@clerk/expo";
 import { FontAwesome6 } from "@expo/vector-icons";
@@ -27,20 +28,21 @@ const UserProfile = () => {
                     <Text className="text-sm text-muted-foreground">{email}</Text>
                 </View>
 
-                {/* BOTONES DE ACCIÓN */}
                 <View className="flex-row items-center gap-2">
-                    {/* Botón Cambiar Idioma */}
-                    <Pressable
-                        onPress={toggleLanguage}
-                        className="h-9 px-3 flex-row items-center justify-center gap-1.5 rounded-xl border border-border bg-secondary"
-                    >
-                        <FontAwesome6 name="globe" size={12} color="#3b5a4a" />
-                        <Text className="text-xs font-bold uppercase text-secondary-foreground">
-                            {locale === "es" ? "ES" : "EN"}
-                        </Text>
-                    </Pressable>
+                    <View className="items-center gap-2">
+                        <ThemeToggle />
+                        <Pressable
+                            onPress={toggleLanguage}
+                            className="h-9 px-3 flex-row items-center justify-center gap-1.5 rounded-xl border border-border bg-secondary"
+                        >
+                            <FontAwesome6 name="globe" size={12} color="#3b5a4a" />
+                            <Text className="text-xs font-bold uppercase text-secondary-foreground">
+                                {locale === "es" ? "ES" : "EN"}
+                            </Text>
+                        </Pressable>
 
-                    {/* Botón Cerrar Sesión */}
+                    </View>
+
                     <Pressable
                         onPress={() => signOut()}
                         className="h-9 w-9 items-center justify-center rounded-xl bg-destructive"
