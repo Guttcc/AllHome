@@ -1,11 +1,14 @@
 import { getLocales } from 'expo-localization';
+import * as SecureStore from 'expo-secure-store';
 import { I18n } from 'i18n-js';
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
 import en from './en.json';
 import es from './es.json';
 
 export const i18n = new I18n({ es, en });
+
+const LOCALE_STORAGE_KEY = 'app_locale';
 
 const rawLocale = getLocales()[0]?.languageCode ?? 'es';
 const initialLocale = rawLocale.startsWith('en') ? 'en' : 'es';
@@ -31,10 +34,19 @@ const LanguageContext = createContext<LanguageContextType>({
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     const [locale, setLocale] = useState(initialLocale);
 
+    useEffect(() => {
+        SecureStore.getItemAsync(LOCALE_STORAGE_KEY).then((saved) => {
+            if (saved === 'en' || saved === 'es') {
+                setLocale(saved);
+            }
+        });
+    }, []);
+
     const changeLanguage = (newLang: string) => {
         const cleanLang = newLang.startsWith('en') ? 'en' : 'es';
         i18n.locale = cleanLang;
         setLocale(cleanLang);
+        SecureStore.setItemAsync(LOCALE_STORAGE_KEY, cleanLang).catch(() => {});
     };
 
     const toggleLanguage = () => {

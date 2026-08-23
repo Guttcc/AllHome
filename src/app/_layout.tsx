@@ -1,8 +1,10 @@
+import { THEME_STORAGE_KEY } from "@/components/insights/ThemeToggle";
 import { LanguageProvider } from "@/lib/i18n";
 import { ClerkProvider, useAuth } from '@clerk/expo';
 import * as Sentry from "@sentry/react-native";
 import { Stack, useRouter, useSegments } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
+import { useColorScheme } from "nativewind";
 import { useEffect } from 'react';
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import "../../global.css";
@@ -26,6 +28,15 @@ function InitialLayout() {
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const { setColorScheme } = useColorScheme();
+
+  useEffect(() => {
+    SecureStore.getItemAsync(THEME_STORAGE_KEY).then((saved) => {
+      if (saved === "light" || saved === "dark") {
+        setColorScheme(saved);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (!isLoaded) return;
