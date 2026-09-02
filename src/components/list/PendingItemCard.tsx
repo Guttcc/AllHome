@@ -21,16 +21,15 @@ const PendingItemCard = ({ item }: { item: GroceryItem }) => {
     const { t, locale } = useLanguage();
 
     const translatedPriority = t(`priorities.${item.priority}`) || item.priority;
-    const translatedCategory = item.category
-        ? t(`categories.${item.category.toLowerCase()}`) || item.category
-        : null;
+    // La categoría ahora es texto libre escrito por el usuario: se muestra tal cual, sin traducir
+    const displayCategory = item.category?.trim() || null;
 
     const formattedPrice =
         item.price !== null && item.price !== undefined
             ? new Intl.NumberFormat(locale === "es" ? "es-ES" : "en-US", {
-                style: "currency",
-                currency: "EUR",
-                }).format(item.price)
+                  style: "currency",
+                  currency: "EUR",
+              }).format(item.price)
             : null;
 
     return (
@@ -61,12 +60,12 @@ const PendingItemCard = ({ item }: { item: GroceryItem }) => {
                         </View>
                     </View>
 
-                    {(translatedCategory || formattedPrice) && (
+                    {(displayCategory || formattedPrice) && (
                         <View className="mt-2 flex-row flex-wrap items-center gap-2">
-                            {translatedCategory && (
+                            {displayCategory && (
                                 <View className="rounded-full bg-secondary px-3 py-1">
                                     <Text className="text-xs font-semibold text-secondary-foreground">
-                                        {translatedCategory}
+                                        {displayCategory}
                                     </Text>
                                 </View>
                             )}

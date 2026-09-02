@@ -15,8 +15,13 @@ export default function InsightsCategorySection() {
     const { t } = useLanguage();
     const total = items.length;
 
+    const uncategorizedLabel = t("categories.none") || "Sin categoría";
+
+    // La categoría es texto libre: agrupamos por el texto tal cual (sin traducir),
+    // y los items sin categoría van juntos bajo la etiqueta "Sin categoría"
     const categories = items.reduce<Record<string, number>>((acc, item) => {
-        acc[item.category] = (acc[item.category] ?? 0) + 1;
+        const label = item.category?.trim() || uncategorizedLabel;
+        acc[label] = (acc[label] ?? 0) + 1;
         return acc;
     }, {});
     const categoryEntries = Object.entries(categories).sort((a, b) => b[1] - a[1]);
@@ -32,12 +37,11 @@ export default function InsightsCategorySection() {
 
             {categoryEntries.map(([category, count]) => {
                 const widthPercent = total ? Math.max(10, Math.round((count / total) * 100)) : 10;
-                const translatedCategory = t(`categories.${category.toLowerCase()}`) || category;
 
                 return (
                     <View key={category} className="mt-3">
                         <View className="mb-1 flex-row items-center justify-between">
-                            <Text className="text-sm font-medium text-foreground">{translatedCategory}</Text>
+                            <Text className="text-sm font-medium text-foreground">{category}</Text>
                             <Text className="text-sm text-muted-foreground">{count}</Text>
                         </View>
                         <View className="overflow-hidden rounded-full bg-secondary">

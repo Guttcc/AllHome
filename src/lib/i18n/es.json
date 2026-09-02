@@ -19,6 +19,9 @@
     "planner": "Crear",
     "insights": "Información"
   },
+  "common": {
+    "optional": "opcional"
+  },
   "planner": {
     "title": "Planificador de compras",
     "tagline": "Planifica mejor, compra con más calma.",
@@ -32,10 +35,16 @@
     "itemName": "Nombre del artículo",
     "namePlaceholder": "Ej: Arándanos",
     "quantity": "Cantidad",
+    "price": "Precio",
     "category": "Categoría",
+    "categoryPlaceholder": "Añadir...",
     "priority": "Prioridad",
     "addButton": "Añadir a la lista",
-    "addedBy": "Añadido por"
+    "addedBy": "Añadido por",
+    "imagePermissionTitle": "Permiso necesario",
+    "imagePermissionDesc": "Necesitamos acceso a tu galería para subir una foto.",
+    "imageUploadErrorTitle": "No se pudo subir la imagen",
+    "imageUploadErrorDesc": "Inténtalo de nuevo en unos segundos."
   },
   "insights": {
     "itemsByCategory": "Artículos por categoría",
@@ -66,11 +75,7 @@
     "clear": "Al día"
   },
   "categories": {
-    "produce": "Productos",
-    "dairy": "Lácteos",
-    "bakery": "Panadería",
-    "pantry": "Despensa",
-    "snacks": "Snacks"
+    "none": "Sin categoría"
   },
   "priorities": {
     "low": "Bajo",
@@ -87,12 +92,18 @@
     "leaveGroup": "Salir del grupo familiar",
     "leaveTitle": "Salir del grupo",
     "leaveConfirm": "¿Estás seguro de que deseas salir de este grupo?",
-    "cancel": "Cancel",
+    "cancel": "Cancelar",
     "leave": "Salir",
     "addToGroup": "Añadir a",
+    "addedBy": "Añadido por",
     "enterGroupName": "Nombre del grupo",
     "enterCode": "Código o link de invitación",
     "defaultUser": "Usuario",
     "copyInviteCode": "Copiar código de invitación"
+  },
+  "list": {
+    "estimatedTotal": "Total estimado",
+    "of": "de",
+    "itemsWithPrice": "productos con precio"
   }
 }

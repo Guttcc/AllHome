@@ -120,12 +120,10 @@ const PlannerFormCard = ({
                 </View>
             </View>
 
-            {/* CATEGORÍA LIBRE (OPCIONAL) */}
+            {/* CATEGORÍA LIBRE */}
             <Text className="mt-4 text-sm font-semibold text-foreground">
                 {t("planner.category") || "Category"}{" "}
-                <Text className="text-xs font-normal text-muted-foreground">
-                    ({t("common.optional") || "opcional"})
-                </Text>
+                
             </Text>
             <View className="mt-2 flex-row items-center rounded-2xl border border-border bg-muted px-4 py-3">
                 <FontAwesome6 name="plus" size={13} color="#5b7567" />

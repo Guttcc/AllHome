@@ -19,6 +19,9 @@
     "planner": "Planner",
     "insights": "Insights"
   },
+  "common": {
+    "optional": "optional"
+  },
   "planner": {
     "title": "Grocery planner",
     "tagline": "Plan smarter, shop calmer.",
@@ -32,10 +35,16 @@
     "itemName": "Item name",
     "namePlaceholder": "Ex: Blueberries",
     "quantity": "Quantity",
+    "price": "Price",
     "category": "Category",
+    "categoryPlaceholder": "Add...",
     "priority": "Priority",
     "addButton": "Add to Grocery List",
-    "addedBy": "Added by"
+    "addedBy": "Added by",
+    "imagePermissionTitle": "Permission needed",
+    "imagePermissionDesc": "We need access to your photo library to upload a picture.",
+    "imageUploadErrorTitle": "Couldn't upload the image",
+    "imageUploadErrorDesc": "Please try again in a few seconds."
   },
   "insights": {
     "itemsByCategory": "Items by category",
@@ -66,11 +75,7 @@
     "clear": "All clear"
   },
   "categories": {
-    "produce": "Produce",
-    "dairy": "Dairy",
-    "bakery": "Bakery",
-    "pantry": "Pantry",
-    "snacks": "Snacks"
+    "none": "No category"
   },
   "priorities": {
     "low": "Low",
@@ -95,5 +100,10 @@
     "enterCode": "Invite code or link",
     "defaultUser": "User",
     "copyInviteCode": "Copy invite code"
+  },
+  "list": {
+    "estimatedTotal": "Estimated total",
+    "of": "of",
+    "itemsWithPrice": "items with price"
   }
 }
