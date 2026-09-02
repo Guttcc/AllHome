@@ -32,11 +32,13 @@ export const listGroceryItems = async (userId?: string) => {
         return rawItems.map((item: any) => ({
             id: item.id,
             name: item.name,
-            category: item.category,
+            category: item.category ?? null,
             quantity: item.quantity,
             purchased: item.purchased,
             priority: item.priority,
             updated_at: item.updated_at,
+            price: item.price !== null && item.price !== undefined ? Number(item.price) : null,
+            imageUri: item.imageUri ?? item.image_uri ?? null,
             userId: item.userId ?? item.user_id ?? null,
             groupId: item.groupId ?? item.group_id ?? null,
         }));
@@ -48,9 +50,11 @@ export const listGroceryItems = async (userId?: string) => {
 
 export const createGroceryItem = async (input: {
     name: string;
-    category: string;
+    category?: string | null;
     quantity: number;
     priority: string;
+    price?: number | null;
+    imageUri?: string | null;
     groupId?: string | null;
     userId?: string;
 }) => {
@@ -59,17 +63,23 @@ export const createGroceryItem = async (input: {
         .values({
             id: crypto.randomUUID(),
             name: input.name,
-            category: input.category,
+            category: input.category?.trim() ? input.category.trim() : null,
             quantity: Math.max(1, input.quantity),
             purchased: false,
             priority: input.priority,
             updated_at: Date.now(),
+            price: input.price !== undefined && input.price !== null ? String(input.price) : null,
+            imageUri: input.imageUri ?? null,
             groupId: input.groupId ?? null,
             userId: input.userId ?? null,
         })
         .returning();
 
-    return rows[0];
+    const row = rows[0] as any;
+    return {
+        ...row,
+        price: row.price !== null && row.price !== undefined ? Number(row.price) : null,
+    };
 };
 
 export const setGroceryItemPurchased = async (id: string, purchased: boolean) => {

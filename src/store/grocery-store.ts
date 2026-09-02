@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type GroceryCategory = "Produce" | "Dairy" | "Bakery" | "Pantry" | "Snacks";
+export type GroceryCategory = string;
 export type GroceryPriority = "low" | "medium" | "high";
 
 export type FamilyGroup = {
@@ -12,18 +12,22 @@ export type FamilyGroup = {
 export type GroceryItem = {
     id: string;
     name: string;
-    category: GroceryCategory;
+    category: GroceryCategory | null;
     quantity: number;
     purchased: boolean;
     priority: GroceryPriority;
+    price?: number | null;
+    imageUri?: string | null;
     groupId?: string | null;
 };
 
 export type CreateItemInput = {
     name: string;
-    category: GroceryCategory;
+    category?: GroceryCategory | null;
     quantity: number;
     priority: GroceryPriority;
+    price?: number | null;
+    imageUri?: string | null;
     groupId?: string | null;
 };
 
@@ -136,9 +140,11 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
                 headers,
                 body: JSON.stringify({
                     name: input.name,
-                    category: input.category,
+                    category: input.category ?? null,
                     quantity: Math.max(1, input.quantity),
                     priority: input.priority,
+                    price: input.price ?? null,
+                    imageUri: input.imageUri ?? null,
                     groupId: targetGroupId,
                     userId: activeUserId ?? null,
                 }),

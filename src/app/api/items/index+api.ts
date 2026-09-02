@@ -16,17 +16,20 @@ export async function POST(request: Request) {
     try {
         const userId = request.headers.get("x-user-id") ?? undefined;
         const body = await request.json();
-        const { name, category, quantity, priority, groupId } = body;
+        const { name, category, quantity, priority, price, imageUri, groupId } = body;
 
-        if (!name || !category || !priority) {
+        // category ya no es obligatoria: solo name y priority lo son
+        if (!name || !priority) {
             return Response.json({ error: "Please provide all required fields." }, { status: 400 });
         }
 
         const item = await createGroceryItem({
             name,
-            category,
+            category: category ?? null,
             quantity,
             priority,
+            price: price !== undefined && price !== null && price !== "" ? Number(price) : null,
+            imageUri: imageUri ?? null,
             groupId: groupId ?? null,
             userId,
         });

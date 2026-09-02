@@ -1,29 +1,27 @@
 import { useLanguage } from "@/lib/i18n";
-import { GroceryCategory, GroceryPriority, useGroceryStore } from "@/store/grocery-store";
+import { GroceryPriority, useGroceryStore } from "@/store/grocery-store";
 import { useUser } from "@clerk/expo";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 
-const categories: GroceryCategory[] = ["Produce", "Dairy", "Bakery", "Pantry", "Snacks"];
 const priorities: GroceryPriority[] = ["low", "medium", "high"];
 
-const categoryIcons: Record<GroceryCategory, string> = {
-    Produce: "leaf",
-    Dairy: "cow",
-    Bakery: "bread-slice",
-    Pantry: "box-open",
-    Snacks: "cookie-bite",
-};
-
-const PlannerFormCard = () => {
+const PlannerFormCard = ({
+    imageUri = null,
+    onItemCreated,
+}: {
+    imageUri?: string | null;
+    onItemCreated?: () => void;
+}) => {
     const { error, addItem, groups, activeContext } = useGroceryStore();
     const { t } = useLanguage();
     const { user } = useUser();
 
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("1");
-    const [category, setCategory] = useState<GroceryCategory>("Produce");
+    const [category, setCategory] = useState("");
+    const [price, setPrice] = useState("");
     const [priority, setPriority] = useState<GroceryPriority>("medium");
 
     const canCreate = name.trim().length > 0;
@@ -33,15 +31,28 @@ const PlannerFormCard = () => {
         setQuantity(value.replace(/[^0-9]/g, ""));
     };
 
+    // Permite dígitos y un solo separador decimal (, o .)
+    const handlePriceChange = (value: string) => {
+        const cleaned = value.replace(/[^0-9.,]/g, "").replace(",", ".");
+        const parts = cleaned.split(".");
+        const normalized = parts.length > 2 ? `${parts[0]}.${parts.slice(1).join("")}` : cleaned;
+        setPrice(normalized);
+    };
+
     const createItem = async (targetGroupId: string | null = null) => {
         if (!user?.id) return;
+
+        const trimmedCategory = category.trim();
+        const parsedPrice = price.trim() ? Number(price) : null;
 
         await addItem(
             {
                 name: name.trim(),
-                category,
+                category: trimmedCategory.length > 0 ? trimmedCategory : null,
                 priority,
                 quantity: Number(quantity) || 1,
+                price: parsedPrice !== null && !Number.isNaN(parsedPrice) ? parsedPrice : null,
+                imageUri: imageUri ?? null,
                 groupId: targetGroupId,
             },
             user.id
@@ -49,8 +60,10 @@ const PlannerFormCard = () => {
 
         setName("");
         setQuantity("1");
-        setCategory("Produce");
+        setCategory("");
+        setPrice("");
         setPriority("medium");
+        onItemCreated?.();
     };
 
     return (
@@ -70,54 +83,64 @@ const PlannerFormCard = () => {
                 />
             </View>
 
-            {/* QUANTITY */}
+            {/* QUANTITY + PRICE */}
+            <View className="mt-4 flex-row gap-3">
+                <View className="flex-1">
+                    <Text className="text-sm font-semibold text-foreground">
+                        {t("planner.quantity") || "Quantity"}
+                    </Text>
+                    <View className="mt-2 flex-row items-center rounded-2xl border border-border bg-muted px-4 py-3">
+                        <FontAwesome6 name="hashtag" size={13} color="#5b7567" />
+                        <TextInput
+                            value={quantity}
+                            onChangeText={handleQuantityChange}
+                            keyboardType="number-pad"
+                            placeholder="1"
+                            placeholderTextColor="#8aa397"
+                            className="ml-3 flex-1 text-base text-foreground"
+                        />
+                    </View>
+                </View>
+
+                <View className="flex-1">
+                    <Text className="text-sm font-semibold text-foreground">
+                        {t("planner.price") || "Precio"}
+                    </Text>
+                    <View className="mt-2 flex-row items-center rounded-2xl border border-border bg-muted px-4 py-3">
+                        <FontAwesome6 name="euro-sign" size={13} color="#5b7567" />
+                        <TextInput
+                            value={price}
+                            onChangeText={handlePriceChange}
+                            keyboardType="decimal-pad"
+                            placeholder="0.00"
+                            placeholderTextColor="#8aa397"
+                            className="ml-3 flex-1 text-base text-foreground"
+                        />
+                    </View>
+                </View>
+            </View>
+
+            {/* CATEGORÍA LIBRE (OPCIONAL) */}
             <Text className="mt-4 text-sm font-semibold text-foreground">
-                {t("planner.quantity") || "Quantity"}
+                {t("planner.category") || "Category"}{" "}
+                <Text className="text-xs font-normal text-muted-foreground">
+                    ({t("common.optional") || "opcional"})
+                </Text>
             </Text>
             <View className="mt-2 flex-row items-center rounded-2xl border border-border bg-muted px-4 py-3">
-                <FontAwesome6 name="hashtag" size={13} color="#5b7567" />
+                <FontAwesome6 name="plus" size={13} color="#5b7567" />
                 <TextInput
-                    value={quantity}
-                    onChangeText={handleQuantityChange}
-                    keyboardType="number-pad"
-                    placeholder="1"
+                    value={category}
+                    onChangeText={setCategory}
+                    placeholder={t("planner.categoryPlaceholder") || "Añadir..."}
                     placeholderTextColor="#8aa397"
                     className="ml-3 flex-1 text-base text-foreground"
                 />
-            </View>
-
-            {/* CATEGORIES */}
-            <Text className="mt-4 text-sm font-semibold text-foreground">
-                {t("planner.category") || "Category"}
-            </Text>
-            <View className="mt-2 flex-row flex-wrap gap-2">
-                {categories.map((option) => {
-                    const active = option === category;
-                    const translatedCategory = t(`categories.${option.toLowerCase()}`) || option;
-
-                    return (
-                        <Pressable
-                            key={option}
-                            onPress={() => setCategory(option)}
-                            className={`flex-row items-center rounded-full px-4 py-2 ${
-                                active ? "bg-primary" : "bg-secondary"
-                            }`}
-                        >
-                            <FontAwesome6
-                                name={categoryIcons[option]}
-                                size={12}
-                                color={active ? "#fff" : "#486856"}
-                            />
-                            <Text
-                                className={`ml-2 text-sm font-semibold ${
-                                    active ? "text-primary-foreground" : "text-secondary-foreground"
-                                }`}
-                            >
-                                {translatedCategory}
-                            </Text>
-                        </Pressable>
-                    );
-                })}
+                {category.length > 0 && (
+                    <Pressable onPress={() => setCategory("")} hitSlop={8}>
+                        <FontAwesome6 name="xmark" size={14} color="#8aa397" />
+                    </Pressable>
+                )}
             </View>
 
             {/* PRIORITY */}

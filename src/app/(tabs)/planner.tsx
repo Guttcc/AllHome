@@ -4,12 +4,14 @@ import TabScreenBackground from "@/components/TabScreenBackground";
 import { useLanguage } from "@/lib/i18n";
 import { useGroceryStore } from "@/store/grocery-store";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { useState } from "react";
 import { Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 const PlannerScreen = () => {
     const { items } = useGroceryStore();
     const { t } = useLanguage();
+    const [pendingImageUri, setPendingImageUri] = useState<string | null>(null);
 
     const pendingCount = items.filter((item) => !item.purchased).length;
     const highPriorityCount = items.filter(
@@ -74,7 +76,7 @@ const PlannerScreen = () => {
                 </View>
             </View>
 
-            <PlannerHeroImage />
+            <PlannerHeroImage imageUri={pendingImageUri} onImagePicked={setPendingImageUri} />
 
             <View className="px-1">
                 <Text className="text-sm font-semibold uppercase tracking-[1px] text-muted-foreground">
@@ -85,7 +87,7 @@ const PlannerScreen = () => {
                 </Text>
             </View>
 
-            <PlannerFormCard />
+            <PlannerFormCard imageUri={pendingImageUri} onItemCreated={() => setPendingImageUri(null)} />
         </KeyboardAwareScrollView>
     );
 };
