@@ -31,3 +31,10 @@ export const groupMembers = pgTable("group_members", {
     role: text("role").notNull().default("member"),
     joinedAt: bigint("joined_at", { mode: "number" }).notNull(),
 });
+
+export const budgets = pgTable("budgets", {
+    id: text("id").primaryKey(),
+    contextId: text("context_id").notNull().unique(),
+    amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+    updatedAt: bigint("updated_at", { mode: "number" }).notNull(),
+});

@@ -1,12 +1,13 @@
-import { useLanguage } from "@/lib/i18n";
 import { FontAwesome6 } from "@expo/vector-icons";
 import * as Sentry from "@sentry/react-native";
-import { Pressable, Text, View } from "react-native";
+import { useColorScheme } from "nativewind";
+import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SentryFeedbackButton = () => {
     const insets = useSafeAreaInsets();
-    const { t } = useLanguage();
+    const { colorScheme } = useColorScheme();
+    const iconColor = colorScheme === "dark" ? "hsl(136 42% 92%)" : "hsl(146 60% 22%)";
 
     return (
         <View
@@ -19,10 +20,9 @@ const SentryFeedbackButton = () => {
         >
             <Pressable
                 onPress={() => Sentry.showFeedbackWidget()}
-                className={`flex-row items-center gap-2 rounded-full border px-4 py-3 border-border bg-card`}
+                className="h-12 w-12 items-center justify-center rounded-full border border-border bg-card"
             >
-                <FontAwesome6 name="comment-dots" size={14} color="hsl(136 42% 92%)" />
-                <Text className={`text-sm font-semibold text-foreground`}>{t("insights.feedback")}</Text>
+                <FontAwesome6 name="comment-dots" size={16} color={iconColor} />
             </Pressable>
         </View>
     );

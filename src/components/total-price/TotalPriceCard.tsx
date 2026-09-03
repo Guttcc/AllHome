@@ -1,30 +1,16 @@
+import { calculateContextTotal } from "@/lib/calculateTotal";
 import { useLanguage } from "@/lib/i18n";
 import { useGroceryStore } from "@/store/grocery-store";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Text, View } from "react-native";
 
-
 const TotalPriceCard = () => {
     const { items, activeContext } = useGroceryStore();
     const { t, locale } = useLanguage();
 
-    const contextItems = items.filter((item) => {
-        if (activeContext === "personal") return !item.groupId;
-        return item.groupId === activeContext;
-    });
+    const { total, pendingCount, itemsWithPriceCount } = calculateContextTotal(items, activeContext);
 
-    const pendingItems = contextItems.filter((item) => !item.purchased);
-    const itemsWithPrice = pendingItems.filter(
-        (item) => item.price !== null && item.price !== undefined
-    );
-
-    const total = itemsWithPrice.reduce(
-        (sum, item) => sum + (item.price ?? 0) * item.quantity,
-        0
-    );
-
-    // Si ningún producto tiene precio todavía, no mostramos la tarjeta
-    if (itemsWithPrice.length === 0) {
+    if (itemsWithPriceCount === 0) {
         return null;
     }
 
@@ -33,7 +19,7 @@ const TotalPriceCard = () => {
         currency: "EUR",
     }).format(total);
 
-    const missingCount = pendingItems.length - itemsWithPrice.length;
+    const missingCount = pendingCount - itemsWithPriceCount;
 
     return (
         <View className="flex-row items-center justify-between rounded-3xl border border-border bg-card p-4">
@@ -47,7 +33,7 @@ const TotalPriceCard = () => {
                     </Text>
                     {missingCount > 0 && (
                         <Text className="mt-0.5 text-xs text-muted-foreground">
-                            {itemsWithPrice.length} {t("list.of") || "de"} {pendingItems.length}{" "}
+                            {itemsWithPriceCount} {t("list.of") || "de"} {pendingCount}{" "}
                             {t("list.itemsWithPrice") || "productos con precio"}
                         </Text>
                     )}

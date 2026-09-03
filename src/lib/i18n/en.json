@@ -104,6 +104,16 @@
   "list": {
     "estimatedTotal": "Estimated total",
     "of": "of",
-    "itemsWithPrice": "items with price"
+    "itemsWithPrice": "items with price",
+    "searchPlaceholder": "Search product or category...",
+    "noResults": "No results found"
+  },
+  "budget": {
+    "title": "Budget",
+    "placeholder": "Ex: 50",
+    "of": "of",
+    "underBudget": "Within budget",
+    "exactBudget": "Right at the limit",
+    "overBudget": "Over budget"
   }
 }

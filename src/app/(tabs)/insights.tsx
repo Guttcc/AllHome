@@ -1,3 +1,4 @@
+import BudgetSection from "@/components/insights/BudgetSection";
 import ClearCompletedButton from "@/components/insights/ClearCompletedButton";
 import InsightsCategorySection from "@/components/insights/InsightsCategorySection";
 import InsightsPrioritySection from "@/components/insights/InsightsPrioritySection";
@@ -22,6 +23,7 @@ const InsightsScreen = () => {
 
                 <UserProfile />
                 <InsightsStatsSection />
+                <BudgetSection />
                 <InsightsCategorySection />
                 <InsightsPrioritySection />
                 <ClearCompletedButton />

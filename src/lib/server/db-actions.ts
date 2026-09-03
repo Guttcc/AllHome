@@ -1,6 +1,6 @@
 import { and, desc, eq, inArray, isNull, or } from "drizzle-orm";
 import { db } from "./db/client";
-import { allhomeItems, groupMembers } from "./db/schema";
+import { allhomeItems, budgets, groupMembers } from "./db/schema";
 
 export const listGroceryItems = async (userId?: string) => {
     if (!userId) {
@@ -110,4 +110,38 @@ export const deleteGroceryItem = async (id: string) => {
 
 export const clearPurchasedItems = async () => {
     await db.delete(allhomeItems).where(eq(allhomeItems.purchased, true));
+};
+
+export const getBudget = async (contextId: string) => {
+    const rows = await db.select().from(budgets).where(eq(budgets.contextId, contextId));
+    if (!rows.length) return null;
+
+    const row = rows[0] as any;
+    return { contextId: row.contextId, amount: Number(row.amount) };
+};
+
+export const setBudget = async (contextId: string, amount: number) => {
+    const existing = await db.select().from(budgets).where(eq(budgets.contextId, contextId));
+
+    if (existing.length > 0) {
+        const rows = await db
+            .update(budgets)
+            .set({ amount: String(amount), updatedAt: Date.now() })
+            .where(eq(budgets.contextId, contextId))
+            .returning();
+        const row = rows[0] as any;
+        return { contextId: row.contextId, amount: Number(row.amount) };
+    }
+
+    const rows = await db
+        .insert(budgets)
+        .values({
+            id: crypto.randomUUID(),
+            contextId,
+            amount: String(amount),
+            updatedAt: Date.now(),
+        })
+        .returning();
+    const row = rows[0] as any;
+    return { contextId: row.contextId, amount: Number(row.amount) };
 };

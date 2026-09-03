@@ -2,7 +2,7 @@ import { useLanguage } from "@/lib/i18n";
 import { GroceryPriority, useGroceryStore } from "@/store/grocery-store";
 import { useUser } from "@clerk/expo";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 
 const priorities: GroceryPriority[] = ["low", "medium", "high"];
@@ -14,7 +14,7 @@ const PlannerFormCard = ({
     imageUri?: string | null;
     onItemCreated?: () => void;
 }) => {
-    const { error, addItem, groups, activeContext } = useGroceryStore();
+    const { error, addItem, groups, activeContext, items } = useGroceryStore();
     const { t } = useLanguage();
     const { user } = useUser();
 
@@ -27,11 +27,26 @@ const PlannerFormCard = ({
     const canCreate = name.trim().length > 0;
     const activeGroup = groups.find((g) => g.id === activeContext) || groups[0];
 
+    const existingCategories = useMemo(() => {
+        const contextItems = items.filter((item) => {
+            if (activeContext === "personal") return !item.groupId;
+            return item.groupId === activeContext;
+        });
+
+        const seen = new Map<string, string>();
+        for (const item of contextItems) {
+            const raw = item.category?.trim();
+            if (!raw) continue;
+            const key = raw.toLowerCase();
+            if (!seen.has(key)) seen.set(key, raw);
+        }
+        return Array.from(seen.values());
+    }, [items, activeContext]);
+
     const handleQuantityChange = (value: string) => {
         setQuantity(value.replace(/[^0-9]/g, ""));
     };
 
-    // Permite dígitos y un solo separador decimal (, o .)
     const handlePriceChange = (value: string) => {
         const cleaned = value.replace(/[^0-9.,]/g, "").replace(",", ".");
         const parts = cleaned.split(".");
@@ -120,10 +135,12 @@ const PlannerFormCard = ({
                 </View>
             </View>
 
-            {/* CATEGORÍA LIBRE */}
+            {/* CATEGORÍA LIBRE (OPCIONAL) */}
             <Text className="mt-4 text-sm font-semibold text-foreground">
                 {t("planner.category") || "Category"}{" "}
-                
+                <Text className="text-xs font-normal text-muted-foreground">
+                    ({t("common.optional") || "opcional"})
+                </Text>
             </Text>
             <View className="mt-2 flex-row items-center rounded-2xl border border-border bg-muted px-4 py-3">
                 <FontAwesome6 name="plus" size={13} color="#5b7567" />
@@ -140,6 +157,32 @@ const PlannerFormCard = ({
                     </Pressable>
                 )}
             </View>
+
+            {/* SUGERENCIAS: categorías ya creadas en esta lista */}
+            {existingCategories.length > 0 && (
+                <View className="mt-2 flex-row flex-wrap gap-2">
+                    {existingCategories.map((cat) => {
+                        const active = category.trim().toLowerCase() === cat.toLowerCase();
+                        return (
+                            <Pressable
+                                key={cat}
+                                onPress={() => setCategory(active ? "" : cat)}
+                                className={`rounded-full px-3 py-1.5 ${
+                                    active ? "bg-primary" : "bg-secondary"
+                                }`}
+                            >
+                                <Text
+                                    className={`text-xs font-semibold ${
+                                        active ? "text-primary-foreground" : "text-secondary-foreground"
+                                    }`}
+                                >
+                                    {cat}
+                                </Text>
+                            </Pressable>
+                        );
+                    })}
+                </View>
+            )}
 
             {/* PRIORITY */}
             <Text className="mt-4 text-sm font-semibold text-foreground">

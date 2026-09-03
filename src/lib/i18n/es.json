@@ -104,6 +104,16 @@
   "list": {
     "estimatedTotal": "Total estimado",
     "of": "de",
-    "itemsWithPrice": "productos con precio"
+    "itemsWithPrice": "productos con precio",
+    "searchPlaceholder": "Buscar producto o categoría...",
+    "noResults": "No se encontraron resultados"
+  },
+  "budget": {
+    "title": "Presupuesto",
+    "placeholder": "Ej: 50",
+    "of": "de",
+    "underBudget": "Dentro del presupuesto",
+    "exactBudget": "Justo en el límite",
+    "overBudget": "Presupuesto superado"
   }
 }

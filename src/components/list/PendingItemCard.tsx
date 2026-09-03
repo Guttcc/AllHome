@@ -73,7 +73,6 @@ const PendingItemCard = ({ item }: { item: GroceryItem }) => {
                             {/* PRECIO EN EUROS (solo si el producto tiene precio) */}
                             {formattedPrice && (
                                 <View className="flex-row items-center gap-1 rounded-full bg-muted px-3 py-1">
-                                    <FontAwesome6 name="euro-sign" size={10} color="#5b7567" />
                                     <Text className="text-xs font-semibold text-foreground">
                                         {formattedPrice}
                                     </Text>

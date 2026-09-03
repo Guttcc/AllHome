@@ -33,6 +33,7 @@ export type CreateItemInput = {
 
 type ItemsResponse = { items: GroceryItem[] };
 type ItemResponse = { item: GroceryItem };
+type BudgetResponse = { budget: { contextId: string; amount: number } | null };
 
 type GroceryStore = {
     items: GroceryItem[];
@@ -41,6 +42,9 @@ type GroceryStore = {
     isLoading: boolean;
     error: string | null;
     currentUserId: string | null;
+
+    budget: number | null;
+    isBudgetLoading: boolean;
 
     loadItems: (userId?: string) => Promise<void>;
     addItem: (input: CreateItemInput, userId?: string) => Promise<GroceryItem | void>;
@@ -54,6 +58,9 @@ type GroceryStore = {
     createGroup: (name: string, userId?: string) => Promise<FamilyGroup | void>;
     joinGroup: (codeOrLink: string, userId?: string) => Promise<FamilyGroup | void>;
     leaveGroup: (groupId: string, userId?: string) => Promise<void>;
+
+    loadBudget: (contextId: string) => Promise<void>;
+    updateBudget: (contextId: string, amount: number) => Promise<void>;
 };
 
 export const useGroceryStore = create<GroceryStore>((set, get) => ({
@@ -63,9 +70,11 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
     isLoading: false,
     error: null,
     currentUserId: null,
+    budget: null,
+    isBudgetLoading: false,
 
     setActiveContext: (context) => {
-        set({ activeContext: context });
+        set({ activeContext: context, budget: null });
     },
 
     switchUser: async (userId?: string) => {
@@ -366,6 +375,41 @@ export const useGroceryStore = create<GroceryStore>((set, get) => ({
         } catch (error) {
             console.error("Error leaving group:", error);
             set({ error: "Error al salir del grupo" });
+        }
+    },
+
+    loadBudget: async (contextId: string) => {
+        set({ isBudgetLoading: true });
+        try {
+            const res = await fetch(`/api/budget?contextId=${encodeURIComponent(contextId)}`);
+            if (!res.ok) throw new Error(`Request failed (${res.status})`);
+
+            const payload = (await res.json()) as BudgetResponse;
+            set({ budget: payload.budget?.amount ?? null });
+        } catch (error) {
+            console.error("Error loading budget:", error);
+        } finally {
+            set({ isBudgetLoading: false });
+        }
+    },
+
+    updateBudget: async (contextId: string, amount: number) => {
+        set({ isBudgetLoading: true });
+        try {
+            const res = await fetch("/api/budget", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contextId, amount }),
+            });
+            if (!res.ok) throw new Error(`Request failed (${res.status})`);
+
+            const payload = (await res.json()) as BudgetResponse;
+            set({ budget: payload.budget?.amount ?? null });
+        } catch (error) {
+            console.error("Error updating budget:", error);
+            set({ error: "Error al guardar el presupuesto" });
+        } finally {
+            set({ isBudgetLoading: false });
         }
     },
 }));
