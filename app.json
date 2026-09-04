@@ -30,7 +30,12 @@
           "publishableKey": "pk_test_cmFwaWQtYmFybmFjbGUtODAuY2xlcmsuYWNjb3VudHMuZGV2JA"
         }
       ],
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": "https://allhome.expo.app"
+        }
+      ],
       "expo-localization",
       [
         "expo-splash-screen",

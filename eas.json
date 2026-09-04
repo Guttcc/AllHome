@@ -14,7 +14,6 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_UNSTABLE_DEPLOY_SERVER": "1",
         "EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK": "1",
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_cmFwaWQtYmFybmFjbGUtODAuY2xlcmsuYWNjb3VudHMuZGV2JA",
         "SENTRY_AUTH_TOKEN": "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",
